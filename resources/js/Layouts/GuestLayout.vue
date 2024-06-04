@@ -24,13 +24,11 @@ export default {
          :style="cssProps">
         <div>
             <Link href="/">
-                <ApplicationLogo class="text-8xl fill-current text-gray-500"/>
+                <ApplicationLogo class="text-6xl fill-current text-gray-500"/>
             </Link>
         </div>
 
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
-        >
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             <slot/>
         </div>
     </div>
@@ -41,5 +39,11 @@ export default {
     --primary: var(--primary);
     --secondary: var(--secondary);
     --accent: var(--accent);
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
 }
 </style>

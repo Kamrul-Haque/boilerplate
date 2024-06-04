@@ -1,44 +1,44 @@
-<script>
-export default {
-    props: {
-        modelValue: {
-            type: [String, Number, Object],
-            required: false,
-        },
-        type: {type: String, required: false, default: 'text'},
-        required: Boolean,
-        label: String,
-        placeholder: String,
-        error: String,
-        autofocus: Boolean,
-        prependIcon: String,
-        appendIcon: String,
-        rounded: Boolean,
-        regex: String,
-        height: {
-            type: [String, Number],
-        }
-    },
-    data() {
-        return {
-            show: false,
-        }
-    },
-    computed: {
-        inputType() {
-            if (this.type === 'password')
-                return this.show ? 'text' : 'password'
+<script setup>
+import {computed, onMounted, ref} from "vue";
 
-            return this.type;
-        }
+const props = defineProps({
+    modelValue: {
+        type: [String, Number, Object],
+        required: false,
     },
-    mounted() {
-        if (this.$refs.input.hasAttribute('autofocus')) {
-            this.$refs.input.focus();
-        }
-    },
-    emits: ['update:modelValue']
-}
+    type: {type: String, required: false, default: 'text'},
+    required: Boolean,
+    label: String,
+    placeholder: String,
+    error: String,
+    autofocus: Boolean,
+    prependIcon: String,
+    appendIcon: String,
+    rounded: Boolean,
+    regex: String,
+    height: {
+        type: [String, Number],
+    }
+});
+
+let show = ref(false);
+
+const inputType = computed(() => {
+    if (props.type === 'password')
+        return show ? 'text' : 'password';
+
+    return props.type;
+});
+
+const input = ref(null);
+
+onMounted(() => {
+    if (input.value.hasAttribute('autofocus')) {
+        input.value.focus();
+    }
+});
+
+defineEmits(['update:modelValue']);
 </script>
 
 <template>

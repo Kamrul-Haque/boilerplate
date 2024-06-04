@@ -2,9 +2,9 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {useForm} from 'laravel-precognition-vue-inertia';
 
-const form = useForm({
+const form = useForm("post", route('register'), {
     name: '',
     email: '',
     password: '',
@@ -12,7 +12,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('register'), {
+    form.submit({
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -25,6 +25,8 @@ const submit = () => {
         <form @submit.prevent="submit">
             <TextField v-model="form.name"
                        :error="form.errors.name"
+                       @change="form.validate('name')"
+                       autofocus
                        required
                        label="Name"/>
 
@@ -32,12 +34,14 @@ const submit = () => {
                        label="Email"
                        v-model="form.email"
                        :error="form.errors.email"
+                       @change="form.validate('email')"
                        required/>
 
             <TextField type="password"
                        label="Password"
                        v-model="form.password"
                        :error="form.errors.password"
+                       @change="form.validate('password')"
                        required/>
 
             <TextField type="password"
@@ -47,10 +51,8 @@ const submit = () => {
                        required/>
 
             <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
+                <Link :href="route('login')"
+                      class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Already registered?
                 </Link>
 

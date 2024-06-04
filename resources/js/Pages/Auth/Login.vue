@@ -3,7 +3,8 @@ import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
+import {useForm} from 'laravel-precognition-vue-inertia';
 
 defineProps({
     canResetPassword: {
@@ -14,14 +15,14 @@ defineProps({
     },
 });
 
-const form = useForm({
+const form = useForm("post", route('login'), {
     email: '',
     password: '',
     remember: false,
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.submit({
         onFinish: () => form.reset('password'),
     });
 };
@@ -41,12 +42,15 @@ const submit = () => {
                        label="Email"
                        v-model="form.email"
                        :error="form.errors.email"
+                       @change="form.validate('email')"
+                       autofocus
                        required/>
 
             <TextField type="password"
                        label="Password"
                        v-model="form.password"
                        :error="form.errors.password"
+                       @change="form.validate('password')"
                        required/>
 
             <div class="block mt-4">
@@ -58,11 +62,9 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
+                <Link v-if="canResetPassword"
+                      :href="route('password.request')"
+                      class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Forgot your password?
                 </Link>
 
