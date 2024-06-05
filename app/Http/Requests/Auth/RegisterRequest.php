@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -27,7 +27,11 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'password' => ['required', Password::min(8)
+                                               ->letters()
+                                               ->numbers()
+                                               ->symbols()],
+            'password_confirmation' => ['required', 'same:password']
         ];
     }
 }

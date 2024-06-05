@@ -1,8 +1,9 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Guest from '@/Layouts/Guest.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head} from '@inertiajs/vue3';
+import {useForm} from 'laravel-precognition-vue-inertia'
 
 const props = defineProps({
     email: {
@@ -15,7 +16,7 @@ const props = defineProps({
     },
 });
 
-const form = useForm({
+const form = useForm('post', route('password.store'), {
     token: props.token,
     email: props.email,
     password: '',
@@ -23,14 +24,14 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('password.store'), {
+    form.submit({
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
 </script>
 
 <template>
-    <GuestLayout>
+    <Guest>
         <Head title="Reset Password"/>
 
         <form @submit.prevent="submit">
@@ -59,5 +60,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    </Guest>
 </template>

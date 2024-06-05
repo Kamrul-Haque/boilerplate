@@ -25,7 +25,7 @@ let show = ref(false);
 
 const inputType = computed(() => {
     if (props.type === 'password')
-        return show ? 'text' : 'password';
+        return show.value ? 'text' : 'password';
 
     return props.type;
 });

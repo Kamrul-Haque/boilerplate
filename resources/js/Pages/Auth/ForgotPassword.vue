@@ -1,8 +1,9 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Guest from '@/Layouts/Guest.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head} from '@inertiajs/vue3';
+import {useForm} from "laravel-precognition-vue-inertia";
 
 defineProps({
     status: {
@@ -10,17 +11,17 @@ defineProps({
     },
 });
 
-const form = useForm({
+const form = useForm('post', route('password.email'), {
     email: '',
 });
 
 const submit = () => {
-    form.post(route('password.email'));
+    form.submit();
 };
 </script>
 
 <template>
-    <GuestLayout>
+    <Guest>
         <Head title="Forgot Password"/>
 
         <div class="mb-4 text-sm text-gray-600">
@@ -38,6 +39,7 @@ const submit = () => {
                        label="Email"
                        v-model="form.email"
                        :error="form.errors.email"
+                       @change="form.validate('email')"
                        required/>
 
             <div class="flex items-center justify-end mt-4">
@@ -47,5 +49,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    </Guest>
 </template>

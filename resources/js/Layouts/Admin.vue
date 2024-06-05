@@ -23,7 +23,7 @@ export default {
     },
     data() {
         return {
-            showSideBar: screen.width < 640 ? false : true,
+            showSideBar: screen.width >= 640,
         }
     },
     computed: {
@@ -117,10 +117,10 @@ export default {
                 :class="[showSideBar ? 'pl-64' : 'pl-0 md:pl-[75px]']">
             {{ $page.props.settings.copyright_text }}
             Developed by
-            <a href="https://buyoniasoft.com"
+            <a href="https://www.linkedin.com/in/utchas/"
                target="_blank"
                class="text-accent hover:text-blue-900">
-                Buyonia Limited
+                Kamrul Haque
             </a>
         </footer>
     </div>

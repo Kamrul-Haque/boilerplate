@@ -1,7 +1,8 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Guest from '@/Layouts/Guest.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
+import {Head, Link} from "@inertiajs/vue3";
 import {useForm} from 'laravel-precognition-vue-inertia';
 
 const form = useForm("post", route('register'), {
@@ -19,7 +20,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <Guest>
         <Head title="Register"/>
 
         <form @submit.prevent="submit">
@@ -48,6 +49,7 @@ const submit = () => {
                        label="Confirm Password"
                        v-model="form.password_confirmation"
                        :error="form.errors.password_confirmation"
+                       @change="form.validate('password_confirmation')"
                        required/>
 
             <div class="flex items-center justify-end mt-4">
@@ -63,5 +65,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    </Guest>
 </template>

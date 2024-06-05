@@ -1,6 +1,6 @@
 <script setup>
 import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import Guest from '@/Layouts/Guest.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
 import {Head, Link} from '@inertiajs/vue3';
@@ -29,7 +29,7 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <Guest>
         <Head title="Log in"/>
 
         <div v-if="status"
@@ -75,5 +75,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    </Guest>
 </template>
