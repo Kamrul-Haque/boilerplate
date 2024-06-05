@@ -1,22 +1,16 @@
-<script>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import {Link} from '@inertiajs/vue3';
+<script setup>
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import {computed} from "vue";
+import {Link, usePage} from "@inertiajs/vue3";
 
-export default {
-    components: {
-        ApplicationLogo,
-        Link
-    },
-    computed: {
-        cssProps() {
-            return {
-                '--primary': this.$page.props.settings.primaryColor,
-                '--secondary': this.$page.props.settings.secondaryColor,
-                '--accent': this.$page.props.settings.accentColor,
-            }
-        }
+const page = usePage();
+const cssProps = computed(() => {
+    return {
+        '--primary': page.props.settings.primaryColor,
+        '--secondary': page.props.settings.secondaryColor,
+        '--accent': page.props.settings.accentColor,
     }
-}
+});
 </script>
 
 <template>

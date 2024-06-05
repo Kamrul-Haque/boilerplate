@@ -8,16 +8,17 @@
                 <form @submit.prevent="submit()">
                     <TextField v-model="form.name"
                                label="Name"
-                               required
                                @change="form.validate('name')"
-                               :error="form.errors.name"/>
+                               :error="form.errors.name"
+                               autofocus
+                               required/>
 
                     <TextField v-model="form.email"
                                type="email"
-                               required
                                label="Email"
                                @change="form.validate('email')"
-                               :error="form.errors.email"/>
+                               :error="form.errors.email"
+                               required/>
 
                     <TextField v-model="form.phone"
                                label="Phone"
@@ -33,9 +34,9 @@
                                  :items="roles"
                                  item-label="name"
                                  item-value="value"
-                                 required
                                  @change="form.validate('role')"
-                                 label="Roles"/>
+                                 label="Roles"
+                                 required/>
 
                     <FileInput v-model="form.image"
                                label="Profile Image"

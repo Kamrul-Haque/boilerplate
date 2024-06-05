@@ -1,43 +1,22 @@
-<script>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+<script setup>
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link} from '@inertiajs/vue3';
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-import NavLink from "@/Components/NavLink.vue";
 import SideBarLinks from "@/Components/SideBarLinks.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
+import {computed} from "vue";
+import {usePage} from "@inertiajs/vue3";
 
-export default {
-    components: {
-        NavLink,
-        SecondaryButton,
-        ApplicationLogo,
-        Dropdown,
-        DropdownLink,
-        ResponsiveNavLink,
-        Link,
-        SideBarLinks,
-        FlashMessage
-    },
-    data() {
-        return {
-            showSideBar: screen.width >= 640,
-        }
-    },
-    computed: {
-        cssProps() {
-            return {
-                '--primary': this.$page.props.settings.primaryColor,
-                '--secondary': this.$page.props.settings.secondaryColor,
-                '--accent': this.$page.props.settings.accentColor,
-                '--background': this.$page.props.settings.backgroundColor,
-                '--table-stripe-color': this.$page.props.settings.tableStripeColor,
-            }
-        }
+const page = usePage();
+let showSideBar = (screen.width >= 640)
+const cssProps = computed(() => {
+    return {
+        '--primary': page.props.settings.primaryColor,
+        '--secondary': page.props.settings.secondaryColor,
+        '--accent': page.props.settings.accentColor,
+        '--background': page.props.settings.backgroundColor,
+        '--table-stripe-color': page.props.settings.tableStripeColor,
     }
-}
+})
 </script>
 
 <template>
@@ -45,13 +24,13 @@ export default {
          :style="cssProps">
         <header class="header">
             <div class="brand">
-                <img :src="$page.props.settings.logo"
+                <img :src="page.props.settings.logo"
                      class="avatar"
                      alt="logo"
                      width="50"
                      height="50"/>
                 <h1 class="brand-title">
-                    {{ $page.props.settings.name }}
+                    {{ page.props.settings.name }}
                 </h1>
             </div>
             <div class="nav">
@@ -63,7 +42,7 @@ export default {
                           class="mdi mdi-chevron-right-box text-2xl"></span>
                 </button>
 
-                <img :src="$page.props.settings.logo"
+                <img :src="page.props.settings.logo"
                      class="avatar md:hidden"
                      alt="logo"
                      width="50"
@@ -74,7 +53,7 @@ export default {
                         <span class="inline-flex rounded-md">
                             <button type="button"
                                     class="header-link">
-                                {{ $page.props.auth.user.name }}
+                                {{ page.props.auth.user.name }}
 
                                 <span class="mdi mdi-chevron-down ml-1"></span>
                             </button>
@@ -115,7 +94,7 @@ export default {
         </div>
         <footer class="footer"
                 :class="[showSideBar ? 'pl-64' : 'pl-0 md:pl-[75px]']">
-            {{ $page.props.settings.copyright_text }}
+            {{ page.props.settings.copyright_text }}
             Developed by
             <a href="https://www.linkedin.com/in/utchas/"
                target="_blank"
