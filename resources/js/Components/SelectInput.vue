@@ -1,26 +1,30 @@
-<script>
-export default {
-    props: {
-        modelValue: {type: [String, Number, Object]},
-        items: {type: Array, required: true},
-        itemLabel: String,
-        itemValue: String,
-        required: Boolean,
-        label: String,
-        placeholder: String,
-        error: String,
-        prependIcon: String,
-        height: {
-            type: [String, Number],
-        },
+<script setup>
+import {onMounted, ref} from "vue";
+
+const props = defineProps({
+    modelValue: {type: [String, Number, Object]},
+    items: {type: Array, required: true},
+    itemLabel: String,
+    itemValue: String,
+    required: Boolean,
+    label: String,
+    placeholder: String,
+    error: String,
+    prependIcon: String,
+    height: {
+        type: [String, Number],
     },
-    mounted() {
-        if (this.$refs.input.hasAttribute('autofocus')) {
-            this.$refs.input.focus();
-        }
-    },
-    emits: ['update:modelValue']
-}
+});
+
+const input = ref(null);
+
+onMounted(() => {
+    if (input.value.hasAttribute('autofocus')) {
+        input.value.focus();
+    }
+});
+
+defineEmits(['update:modelValue']);
 </script>
 
 <template>

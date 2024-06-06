@@ -1,19 +1,16 @@
-<script>
+<script setup>
 import {Link} from "@inertiajs/vue3";
 
-export default {
-    components: {
-        Link
-    },
-    props: {
-        links: Array
+const props = defineProps({
+    links: {
+        type: Array
     }
-}
+});
 </script>
 
 <template>
     <div>
-        <Component :is="(link.url) ? 'Link' : 'span'"
+        <Component :is="(link.url) ? Link : 'span'"
                    v-for="(link, index) in links"
                    :key="index"
                    :class="{'page-link-disabled': !link.url, 'page-link-active': link.active}"

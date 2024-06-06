@@ -78,6 +78,14 @@
         @apply bg-primary hover:bg-primary focus:bg-primary focus:ring-primary active:bg-primary;
     }
 
+    .btn-secondary {
+        @apply bg-secondary hover:bg-secondary focus:bg-secondary focus:ring-secondary active:bg-secondary;
+    }
+
+    .btn-danger {
+        @apply bg-error hover:bg-error focus:bg-error focus:ring-error active:bg-error;
+    }
+
     .label {
         @apply block font-medium text-sm text-gray-800 mb-2;
     }

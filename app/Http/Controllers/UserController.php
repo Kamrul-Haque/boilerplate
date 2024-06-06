@@ -59,7 +59,7 @@ class UserController extends Controller
         $valid = $request->validated();
 
         if ($request->hasFile('image'))
-            $valid['image'] = $request->file('image')->storePublicly('ProfileImages', 's3');
+            $valid['image'] = $request->file('image')->storePublicly('ProfileImages');
 
         $password = Str::password(16);
         $valid['password'] = $password;
@@ -99,12 +99,12 @@ class UserController extends Controller
             if ($user->getRawOriginal('image') && Storage::exists($user->getRawOriginal('image')))
                 Storage::delete($user->getRawOriginal('image'));
 
-            $valid['image'] = $request->file('image')->storePublicly('ProfileImages', 's3');
+            $valid['image'] = $request->file('image')->storePublicly('ProfileImages');
         }
 
         $user->update($valid);
 
-        return to_route('users.index')->with('success', 'User created successfully');
+        return to_route('users.index')->with('success', 'User updated successfully');
     }
 
     /**
@@ -145,7 +145,7 @@ class UserController extends Controller
         $user = User::withTrashed()->findOrFail($user);
 
         if ($user->getRawOriginal('image'))
-            return Storage::disk('s3')->response($user->getRawOriginal('image'));
+            return Storage::response($user->getRawOriginal('image'));
 
         return null;
     }

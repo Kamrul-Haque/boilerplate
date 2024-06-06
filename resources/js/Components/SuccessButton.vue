@@ -1,13 +1,11 @@
-<script>
-export default {
-    props: {
-        rounded: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
+<script setup>
+const props = defineProps({
+    rounded: {
+        type: Boolean,
+        required: false,
+        default: false
     }
-}
+});
 </script>
 <template>
     <button

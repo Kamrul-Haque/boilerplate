@@ -1,55 +1,58 @@
-<script>
-export default {
-    props: {
-        multiple: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        required: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        label: {
-            type: String,
-            required: false
-        },
-        placeholder: {
-            type: String,
-            required: false
-        },
-        error: {
-            type: String,
-            required: false,
-            default: null
-        },
-        autofocus: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-    },
-    mounted() {
-        if (this.$refs.input.hasAttribute('autofocus')) {
-            this.$refs.focus();
-        }
-    },
-    emits: ['update:modelValue'],
-    methods: {
-        handleChange(event) {
-            let files;
+<script setup>
+import {onMounted, ref} from "vue";
 
-            if (event.target.files && event.target.files[0]) {
-                if (this.multiple)
-                    files = event.target.files;
-                else
-                    files = event.target.files[0];
-            }
+const props = defineProps({
+    multiple: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    required: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    label: {
+        type: String,
+        required: false
+    },
+    placeholder: {
+        type: String,
+        required: false
+    },
+    error: {
+        type: String,
+        required: false,
+        default: null
+    },
+    autofocus: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+});
 
-            this.$emit('update:modelValue', files);
-        }
+const input = ref(null);
+
+onMounted(() => {
+    if (input.value.hasAttribute('autofocus')) {
+        input.value.focus();
     }
+});
+
+let emit = defineEmits(['update:modelValue'])
+
+function handleChange(event) {
+    let files;
+
+    if (event.target.files && event.target.files[0]) {
+        if (props.multiple)
+            files = event.target.files;
+        else
+            files = event.target.files[0];
+    }
+
+    emit('update:modelValue', files);
 }
 </script>
 
