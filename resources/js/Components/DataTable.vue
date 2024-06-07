@@ -1,88 +1,87 @@
-<script>
+<script setup>
 import {debounce} from "lodash";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import Paginator from "@/Components/Paginator.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {Link} from "@inertiajs/vue3";
+import {Link, router} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
+import {reactive, ref, watch} from "vue";
 
-export default {
-    components: {TextField, Link, PrimaryButton, Paginator, SelectInput, DropdownLink, Dropdown},
-    props: {
-        headers: {
-            type: Array,
-            required: true,
-        },
-        items: {
-            type: Object,
-            required: false
-        },
-        caption: {
-            type: String,
-            required: false,
-            default: null
-        },
-        indexRoute: {
-            type: String,
-            required: true
-        },
-        createRoute: {
-            type: String,
-            required: false,
-            default: null
-        },
-        createButtonLabel: {
-            type: String,
-            required: false,
-            default: null
-        },
-        filters: {
-            type: Object,
-            required: true,
-        }
+const props = defineProps({
+    headers: {
+        type: Array,
+        required: true,
     },
-    data() {
-        return {
-            params: {
-                search: this.filters.search ? this.filters.search : '',
-                sortBy: this.filters.sortBy ? this.filters.sortBy : null,
-                sortDesc: !!this.filters.sortDesc,
-                perPage: this.filters.perPage ? parseInt(this.filters.perPage) : 15,
-            },
-        };
+    items: {
+        type: Object,
+        required: false
     },
-    watch: {
-        params: {
-            handler(value) {
-                if (value.perPage !== parseInt(this.filters.perPage))
-                    this.params.page = 1;
-                else this.params.page = this.items.current_page;
-                this.updateData();
-            },
-            deep: true,
-        },
-        search: debounce(function (value) {
-            if (value) {
-                this.params.search = value;
-                this.updateData();
-            }
-        }, 500),
+    caption: {
+        type: String,
+        required: false,
+        default: null
     },
-    methods: {
-        async updateData() {
-            await this.$inertia.get(this.indexRoute, this.params, {
-                preserveScroll: true,
-                preserveState: true,
-                replace: true,
-            });
-        },
-        sort(sortBy) {
-            this.params.sortBy = sortBy;
-            this.params.sortDesc = !this.params.sortDesc;
-        }
+    indexRoute: {
+        type: String,
+        required: true
     },
+    createRoute: {
+        type: String,
+        required: false,
+        default: null
+    },
+    createButtonLabel: {
+        type: String,
+        required: false,
+        default: null
+    },
+    filters: {
+        type: Object,
+        required: true,
+    }
+});
+
+let params = reactive({
+    search: props.filters.search ? props.filters.search : '',
+    sortBy: props.filters.sortBy ? props.filters.sortBy : null,
+    sortDesc: !!props.filters.sortDesc,
+    perPage: props.filters.perPage ? parseInt(props.filters.perPage) : 15,
+});
+
+let search = ref(params.search);
+
+watch(params, (newVal, oldVal) => {
+    if (newVal.perPage !== oldVal.perPage) {
+        params.page = 1;
+    }
+    updateData();
+}, {
+    deep: true
+});
+
+watch(search, debounce((value) => {
+    if (value) {
+        params.search = value;
+        updateData();
+    }
+}, 500));
+
+async function updateData() {
+    router.get(props.indexRoute, params, {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+    });
+}
+
+// Method to handle sorting
+function sort(sortBy) {
+    if (params.sortBy === sortBy) {
+        params.sortDesc = !params.sortDesc;
+    } else {
+        params.sortBy = sortBy;
+        params.sortDesc = false;
+    }
+    updateData();
 }
 </script>
 

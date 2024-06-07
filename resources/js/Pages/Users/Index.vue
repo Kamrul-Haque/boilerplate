@@ -1,33 +1,25 @@
-<script>
+<script setup>
 import DataTable from "@/Components/DataTable.vue";
 import Admin from "@/Layouts/Admin.vue";
-import {Head, Link} from "@inertiajs/vue3";
+import {Head, Link, router} from "@inertiajs/vue3";
 import Modal from "@/Components/Modal.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
-import SelectInput from "@/Components/SelectInput.vue";
+import {ref} from "vue";
 
-export default {
-    components: {SelectInput, DangerButton, PrimaryButton, SecondaryButton, Modal, Head, Admin, DataTable, Link},
-    props: ['users', 'filters'],
-    data() {
-        return {
-            headers: [
-                {text: 'image', value: 'image'},
-                {text: 'name', value: 'name', sortable: true},
-                {text: 'email', value: 'email', sortable: true},
-                {text: 'role', value: 'role', sortable: true},
-            ],
-            itemId: null
-        }
-    },
-    methods: {
-        deleteItem() {
-            this.$inertia.delete(route('users.delete', this.itemId), {preserveState: false});
-            this.itemId = null;
-        }
-    }
+const props = defineProps(['users', 'filters']);
+
+const headers = [
+    {text: 'image', value: 'image'},
+    {text: 'name', value: 'name', sortable: true},
+    {text: 'email', value: 'email', sortable: true},
+    {text: 'role', value: 'role', sortable: true},
+];
+
+let itemId = ref(null);
+
+function deleteItem() {
+    router.delete(route('users.delete', itemId), {preserveState: false});
+    itemId = null;
 }
 </script>
 

@@ -1,3 +1,46 @@
+<script setup>
+import Admin from "@/Layouts/Admin.vue";
+import {Head} from "@inertiajs/vue3";
+import TextField from "@/Components/TextField.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextArea from "@/Components/TextArea.vue";
+import FileInput from "@/Components/FileInput.vue";
+import {useForm} from "laravel-precognition-vue-inertia";
+
+const props = defineProps({
+    setting: {
+        type: Object
+    }
+});
+const form = useForm('post', route('settings.update', props.setting), {
+    _method: 'put',
+    name: props.setting ? props.setting.name : null,
+    email: props.setting ? props.setting.email : null,
+    address: props.setting ? props.setting.address : null,
+    admin_email: props.setting ? props.setting.admin_email : null,
+    support_email: props.setting ? props.setting.support_email : null,
+    phone: props.setting ? props.setting.phone : null,
+    mobile: props.setting ? props.setting.mobile : null,
+    whatsapp: props.setting ? props.setting.whatsapp : null,
+    description: props.setting ? props.setting.description : null,
+    copyright_text: props.setting ? props.setting.copyright_text : null,
+    logo: null,
+    alternate_logo: null,
+    portal_logo: null,
+    favicon: null,
+    primary_color: props.setting ? props.setting.primary_color : null,
+    secondary_color: props.setting ? props.setting.secondary_color : null,
+    accent_color: props.setting ? props.setting.accent_color : null,
+    background_color: props.setting ? props.setting.background_color : null,
+    table_stripe_color: props.setting ? props.setting.table_stripe_color : null,
+    under_maintenance: props.setting ? props.setting.under_maintenance : null,
+});
+
+function submit() {
+    form.submit({preserveScroll: true});
+}
+</script>
+
 <template>
     <Head title="Settings"/>
 
@@ -144,58 +187,3 @@
         </div>
     </Admin>
 </template>
-
-<script>
-import Admin from "@/Layouts/Admin.vue";
-import {Head} from "@inertiajs/vue3";
-import TextField from "@/Components/TextField.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextArea from "@/Components/TextArea.vue";
-import FileInput from "@/Components/FileInput.vue";
-import {useForm} from "laravel-precognition-vue-inertia";
-
-export default {
-    props: ['setting'],
-    components: {
-        FileInput,
-        TextArea,
-        PrimaryButton,
-        TextField,
-        Head,
-        Admin,
-    },
-    data() {
-        return {
-            form: useForm('post',
-                route('settings.update', this.setting), {
-                    _method: 'put',
-                    name: this.setting ? this.setting.name : null,
-                    email: this.setting ? this.setting.email : null,
-                    address: this.setting ? this.setting.address : null,
-                    admin_email: this.setting ? this.setting.admin_email : null,
-                    support_email: this.setting ? this.setting.support_email : null,
-                    phone: this.setting ? this.setting.phone : null,
-                    mobile: this.setting ? this.setting.mobile : null,
-                    whatsapp: this.setting ? this.setting.whatsapp : null,
-                    description: this.setting ? this.setting.description : null,
-                    copyright_text: this.setting ? this.setting.copyright_text : null,
-                    logo: null,
-                    alternate_logo: null,
-                    portal_logo: null,
-                    favicon: null,
-                    primary_color: this.setting ? this.setting.primary_color : null,
-                    secondary_color: this.setting ? this.setting.secondary_color : null,
-                    accent_color: this.setting ? this.setting.accent_color : null,
-                    background_color: this.setting ? this.setting.background_color : null,
-                    table_stripe_color: this.setting ? this.setting.table_stripe_color : null,
-                    under_maintenance: this.setting ? this.setting.under_maintenance : null,
-                }),
-        }
-    },
-    methods: {
-        submit() {
-            this.form.submit({preserveScroll: true});
-        },
-    }
-};
-</script>

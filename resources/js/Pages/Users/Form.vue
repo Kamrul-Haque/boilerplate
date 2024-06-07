@@ -1,3 +1,32 @@
+<script setup>
+import Admin from "@/Layouts/Admin.vue";
+import {Head, usePage} from "@inertiajs/vue3";
+import TextField from "@/Components/TextField.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextArea from "@/Components/TextArea.vue";
+import FileInput from "@/Components/FileInput.vue";
+import SelectInput from "@/Components/SelectInput.vue";
+import {useForm} from 'laravel-precognition-vue-inertia';
+
+const page = usePage();
+const props = defineProps({user: {type: Object}});
+const roles = page.props.auth.roles;
+
+const form = useForm('post', props.user ? route('users.update', props.user.id) : route('users.store'), {
+    _method: props.user ? 'put' : 'post',
+    name: props.user ? props.user.name : null,
+    email: props.user ? props.user.email : null,
+    phone: props.user ? props.user.phone : null,
+    address: props.user ? props.user.address : null,
+    role: props.user ? props.user.role : null,
+    image: null,
+});
+
+function submit() {
+    form.submit({preserveScroll: true})
+}
+</script>
+
 <template>
     <Head title="Settings"/>
 
@@ -52,47 +81,3 @@
         </div>
     </Admin>
 </template>
-
-<script>
-import Admin from "@/Layouts/Admin.vue";
-import {Head} from "@inertiajs/vue3";
-import TextField from "@/Components/TextField.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextArea from "@/Components/TextArea.vue";
-import FileInput from "@/Components/FileInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
-import {useForm} from 'laravel-precognition-vue-inertia';
-
-export default {
-    props: ['user'],
-    components: {
-        SelectInput,
-        FileInput,
-        TextArea,
-        PrimaryButton,
-        TextField,
-        Head,
-        Admin,
-    },
-    data() {
-        return {
-            form: useForm('post',
-                this.user ? route('users.update', this.user.id) : route('users.store'), {
-                    _method: this.user ? 'put' : 'post',
-                    name: this.user ? this.user.name : null,
-                    email: this.user ? this.user.email : null,
-                    phone: this.user ? this.user.phone : null,
-                    address: this.user ? this.user.address : null,
-                    role: this.user ? this.user.role : null,
-                    image: null,
-                }),
-            roles: this.$page.props.auth.roles,
-        }
-    },
-    methods: {
-        submit() {
-            this.form.submit({preserveScroll: true})
-        },
-    }
-};
-</script>

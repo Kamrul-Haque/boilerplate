@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {usePage} from "@inertiajs/vue3";
 
 let show = ref(false);
@@ -9,15 +9,16 @@ const flash = computed(() => {
     return page.props.flash
 });
 
-watch(flash, (newValue, oldValue) => {
+watch(flash, () => {
     show.value = true;
 });
 
-onMounted(() => {
-    setTimeout(() => {
-        if (show.value)
+watch(show, () => {
+    if (show.value) {
+        setTimeout(() => {
             show.value = false;
-    }, 4000);
+        }, 3000)
+    }
 });
 </script>
 
