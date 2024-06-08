@@ -1,79 +1,110 @@
 <script setup>
-import {computed, ref} from 'vue'
-import {
-    Combobox,
-    ComboboxButton,
-    ComboboxInput,
-    ComboboxOption,
-    ComboboxOptions,
-    TransitionRoot,
-} from '@headlessui/vue'
-import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
+import {computed, onMounted, ref} from "vue";
 
-const props = {
-    items: {
-        type: Array,
-        required: true
+const props = defineProps({
+    modelValue: {
+        type: [String, Number, Object],
+        required: false,
+    },
+    items: Array,
+    itemLabel: String,
+    itemValue: String,
+    required: Boolean,
+    label: String,
+    placeholder: String,
+    error: String,
+    autofocus: Boolean,
+    prependIcon: String,
+    appendIcon: String,
+    rounded: Boolean,
+    regex: String,
+    height: {
+        type: [String, Number],
     }
+});
+
+const query = ref('');
+const focused = ref(false);
+const highlightedIndex = ref(-1);
+const preventBlur = ref(false);
+
+const filteredSuggestions = computed(() =>
+    props.items.filter(item =>
+        typeof item === 'object'
+            ? item[props.itemLabel].toLowerCase().includes(query.value.toLowerCase())
+            : item.toLowerCase().includes(query.value.toLowerCase())
+    )
+);
+
+const input = ref(null);
+
+onMounted(() => {
+    if (input.value.hasAttribute('autofocus')) {
+        input.value.focus();
+    }
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+function selectItem(suggestion) {
+    preventBlur.value = true;
+
+    if (typeof suggestion === 'object')
+        query.value = suggestion[props.itemLabel];
+    else
+        query.value = suggestion;
+
+    focused.value = false;
+
+    emit('update:modelValue', suggestion[props.itemValue]);
 }
-
-const selected = ref(null)
-const query = ref('')
-
-const filteredItems = computed(() =>
-    query.value === ''
-        ? props.items
-        : props.items.filter((item) =>
-            item.name
-                .toLowerCase()
-                .replace(/\s+/g, '')
-                .includes(query.value.toLowerCase().replace(/\s+/g, ''))
-        )
-)
 </script>
 
 <template>
-    <div class="fixed top-16 w-72">
-        <Combobox v-model="selected">
-            <div class="relative mt-1">
-                <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-                    <ComboboxInput class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                                   :displayValue="(person) => person?.name"
-                                   @change="query = $event.target.value"/>
-                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
-                        <ChevronUpDownIcon class="h-5 w-5 text-gray-400"
-                                           aria-hidden="true"/>
-                    </ComboboxButton>
-                </div>
-                <TransitionRoot leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                                @after-leave="query = ''">
-                    <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                        <div v-if="filteredItems.length === 0 && query !== ''"
-                             class="relative cursor-default select-none px-4 py-2 text-gray-700">
-                            Nothing found.
-                        </div>
-                        <ComboboxOption v-for="item in filteredItems"
-                                        :key="item.id"
-                                        :value="item"
-                                        v-slot="{ selected, active }">
-                            <li class="relative cursor-default select-none py-2 pl-10 pr-4"
-                                :class="{'bg-teal-600 text-white': active, 'text-gray-900': !active}">
-                <span class="block truncate"
-                      :class="{'font-medium': selected, 'font-normal': !selected}">
-                  {{ item.name }}
-                </span>
-                                <span v-if="selected"
-                                      class="absolute inset-y-0 left-0 flex items-center pl-3"
-                                      :class="{'text-white': active, 'text-teal-600': !active}"><CheckIcon class="h-5 w-5"
-                                                                                                           aria-hidden="true"/>
-                                </span>
-                            </li>
-                        </ComboboxOption>
-                    </ComboboxOptions>
-                </TransitionRoot>
+    <div class="my-4">
+        <label v-if="label"
+               class="label capitalize">
+            {{ label }}
+            <span v-if="required"
+                  class="text-error text-sm">*</span>
+        </label>
+        <div class="relative">
+            <div v-if="prependIcon"
+                 class="absolute flex items-center text-xl text-gray-800 left-0 ml-3 inset-y-0">
+                <i :class="prependIcon"></i>
             </div>
-        </Combobox>
+            <div class="relative w-full"
+                 @focus="focused">
+                <input class="input"
+                       :class="[error ? 'border-error' : 'border-gray-200', prependIcon ? 'pl-9' : '', rounded ? 'rounded-full' : 'rounded-md', height ? `h-${height}` : '']"
+                       v-model="query"
+                       type="text"
+                       :placeholder="placeholder"
+                       :required="required"
+                       :autofocus="autofocus"
+                       :pattern="regex"
+                       autocomplete="off"
+                       @focus="focused = true"
+                       @blur="() => { if (!preventBlur) focused = false; }"
+                       ref="input"/>
+                <ul v-show="filteredSuggestions.length && focused"
+                    class="absolute w-full bg-white border rounded mt-1 max-h-48 overflow-y-auto">
+                    <li v-for="(suggestion, index) in filteredSuggestions"
+                        :key="index"
+                        @mousedown="selectItem(suggestion)"
+                        :class="['p-2 cursor-pointer', highlightedIndex === index ? 'bg-gray-200' : 'hover:bg-gray-200']">
+                        {{ typeof suggestion === 'object' ? suggestion[itemLabel] : suggestion }}
+                    </li>
+                </ul>
+            </div>
+            <div v-if="appendIcon"
+                 class="absolute flex items-center text-xl text-gray-800 right-0 mr-3 inset-y-0">
+                <i :class="appendIcon"></i>
+            </div>
+        </div>
+        <span v-if="error"
+              class="validation-error">
+            {{ error }}
+        </span>
     </div>
 </template>

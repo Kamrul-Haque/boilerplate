@@ -6,7 +6,11 @@ const props = defineProps({
         type: [String, Number, Object],
         required: false,
     },
-    type: {type: String, required: false, default: 'text'},
+    type: {
+        type: String,
+        required: false,
+        default: 'text'
+    },
     required: Boolean,
     label: String,
     placeholder: String,

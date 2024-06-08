@@ -3,11 +3,11 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import SideBarLinks from "@/Components/SideBarLinks.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {usePage} from "@inertiajs/vue3";
 
 const page = usePage();
-let showSideBar = (screen.width >= 640)
+let showSideBar = ref(screen.width >= 640)
 const cssProps = computed(() => {
     return {
         '--primary': page.props.settings.primaryColor,
