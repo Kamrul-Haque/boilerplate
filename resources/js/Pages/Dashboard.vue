@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3';
 import Switch from "@/Components/Switch.vue";
 import {ref} from "vue";
 import AutoComplete from "@/Components/AutoComplete.vue";
+import DropZone from "@/Components/DropZone.vue";
 
 let value = ref(false);
 const suggestions = [
@@ -44,6 +45,14 @@ const fruit = ref(null)
                           required
                           label="autocomplete"
                           :error="'input is invalid'"></AutoComplete>
+        </div>
+
+        <div class="my-4">
+            <DropZone label="dropzone"
+                      allow-multiple
+                      allow-preview
+                      required>
+            </DropZone>
         </div>
     </Admin>
 </template>
