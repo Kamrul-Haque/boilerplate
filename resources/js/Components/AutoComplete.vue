@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, nextTick, onMounted, ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: {
@@ -15,7 +15,6 @@ const props = defineProps({
     error: String,
     autofocus: Boolean,
     prependIcon: String,
-    appendIcon: String,
     rounded: Boolean,
     regex: String,
     height: {
@@ -36,14 +35,6 @@ const filteredSuggestions = computed(() =>
     )
 );
 
-const input = ref(null);
-
-onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
-        input.value.focus();
-    }
-});
-
 const emit = defineEmits(['update:modelValue']);
 
 function selectItem(suggestion) {
@@ -55,9 +46,71 @@ function selectItem(suggestion) {
         query.value = suggestion;
 
     focused.value = false;
+    highlightedIndex.value = -1;
 
     emit('update:modelValue', suggestion[props.itemValue]);
 }
+
+watch(query, () => {
+    if (!query.value)
+        emit('update:modelValue', null);
+})
+
+function handleKeyDown(event) {
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (highlightedIndex.value < filteredSuggestions.value.length - 1) {
+            highlightedIndex.value++;
+        } else {
+            highlightedIndex.value = 0;
+        }
+        nextTick(() => {
+            scrollToHighlightedItem();
+        });
+    } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (highlightedIndex.value > 0) {
+            highlightedIndex.value--;
+        } else {
+            highlightedIndex.value = filteredSuggestions.value.length - 1;
+        }
+        nextTick(() => {
+            scrollToHighlightedItem();
+        });
+    } else if (event.key === 'Enter' && highlightedIndex.value !== -1) {
+        event.preventDefault();
+        selectItem(filteredSuggestions.value[highlightedIndex.value]);
+    } else if (event.key === 'Escape') {
+        focused.value = false;
+        highlightedIndex.value = -1;
+    }
+}
+
+function scrollToHighlightedItem() {
+    const list = suggestionList.value;
+    const item = list.children[highlightedIndex.value];
+    if (item) {
+        const itemTop = item.offsetTop;
+        const itemBottom = itemTop + item.offsetHeight;
+        const listTop = list.scrollTop;
+        const listBottom = listTop + list.clientHeight;
+
+        if (itemTop < listTop) {
+            list.scrollTop = itemTop;
+        } else if (itemBottom > listBottom) {
+            list.scrollTop = itemBottom - list.clientHeight;
+        }
+    }
+}
+
+const input = ref(null);
+const suggestionList = ref(null);
+
+onMounted(() => {
+    if (input.value.hasAttribute('autofocus')) {
+        input.value.focus();
+    }
+});
 </script>
 
 <template>
@@ -84,22 +137,25 @@ function selectItem(suggestion) {
                        :autofocus="autofocus"
                        :pattern="regex"
                        autocomplete="off"
+                       @keydown="handleKeyDown"
                        @focus="focused = true"
                        @blur="() => { if (!preventBlur) focused = false; }"
                        ref="input"/>
-                <ul v-show="filteredSuggestions.length && focused"
-                    class="absolute w-full bg-white border rounded mt-1 max-h-48 overflow-y-auto">
-                    <li v-for="(suggestion, index) in filteredSuggestions"
-                        :key="index"
-                        @mousedown="selectItem(suggestion)"
-                        :class="['p-2 cursor-pointer', highlightedIndex === index ? 'bg-gray-200' : 'hover:bg-gray-200']">
-                        {{ typeof suggestion === 'object' ? suggestion[itemLabel] : suggestion }}
-                    </li>
-                </ul>
+                <transition name="fade">
+                    <ul v-show="filteredSuggestions.length && focused"
+                        class="absolute w-full bg-white border rounded mt-1 p-1 max-h-48 overflow-y-auto"
+                        ref="suggestionList">
+                        <li v-for="(suggestion, index) in filteredSuggestions"
+                            :key="index"
+                            @mousedown="selectItem(suggestion)"
+                            :class="['p-2 cursor-pointer rounded', highlightedIndex === index ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white']">
+                            {{ typeof suggestion === 'object' ? suggestion[itemLabel] : suggestion }}
+                        </li>
+                    </ul>
+                </transition>
             </div>
-            <div v-if="appendIcon"
-                 class="absolute flex items-center text-xl text-gray-800 right-0 mr-3 inset-y-0">
-                <i :class="appendIcon"></i>
+            <div class="absolute flex items-center text-xl text-gray-800 right-0 mr-3 inset-y-0">
+                <i :class="[filteredSuggestions.length && focused ? 'mdi mdi-chevron-up' : 'mdi mdi-chevron-down']"></i>
             </div>
         </div>
         <span v-if="error"
@@ -108,3 +164,17 @@ function selectItem(suggestion) {
         </span>
     </div>
 </template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
+}
+</style>

@@ -42,7 +42,6 @@ const fruit = ref(null)
                           item-value="id"
                           v-model="fruit"
                           required
-                          autofocus
                           label="autocomplete"
                           :error="'input is invalid'"></AutoComplete>
         </div>
