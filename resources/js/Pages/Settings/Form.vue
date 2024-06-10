@@ -12,6 +12,7 @@ const props = defineProps({
         type: Object
     }
 });
+
 const form = useForm('post', route('settings.update', props.setting), {
     _method: 'put',
     name: props.setting ? props.setting.name : null,

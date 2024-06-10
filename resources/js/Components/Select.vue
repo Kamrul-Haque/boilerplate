@@ -16,14 +16,9 @@ const props = defineProps({
     autofocus: Boolean,
     prependIcon: String,
     rounded: Boolean,
-    regex: String,
     height: {
         type: [String, Number],
     },
-    clearable: {
-        type: Boolean,
-        default: true
-    }
 });
 
 const query = ref('');
@@ -31,13 +26,7 @@ const focused = ref(false);
 const highlightedIndex = ref(-1);
 const preventBlur = ref(false);
 
-const filteredSuggestions = computed(() =>
-    props.items.filter(item =>
-        typeof item === 'object'
-            ? item[props.itemLabel].toLowerCase().includes(query.value.toLowerCase())
-            : item.toLowerCase().includes(query.value.toLowerCase())
-    )
-);
+const filteredSuggestions = computed(() => props.items);
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -150,15 +139,15 @@ onMounted(() => {
                        :class="[error ? 'border-error' : 'border-gray-200', prependIcon ? 'pl-9' : '', rounded ? 'rounded-full' : 'rounded-md', height ? `h-${height}` : '']"
                        v-model="query"
                        type="text"
-                       :placeholder="placeholder"
+                       :placeholder="[placeholder || 'Please Select...']"
                        :required="required"
                        :autofocus="autofocus"
-                       :pattern="regex"
                        autocomplete="off"
                        @keydown="handleKeyDown"
                        @focus="focused = true"
                        @blur="() => { if (!preventBlur) focused = false; }"
-                       ref="input"/>
+                       ref="input"
+                       readonly/>
                 <transition name="fade">
                     <ul v-show="filteredSuggestions.length && focused"
                         class="absolute w-full bg-white border rounded mt-1 p-1 max-h-48 overflow-y-auto z-10"
@@ -172,7 +161,7 @@ onMounted(() => {
                     </ul>
                 </transition>
             </div>
-            <div v-if="query && clearable"
+            <div v-if="query"
                  class="absolute flex items-center text-xl text-primary right-0 mr-8 inset-y-0"
                  @click="query = ''">
                 <i class="mdi mdi-close"></i>

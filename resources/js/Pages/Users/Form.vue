@@ -5,8 +5,8 @@ import TextField from "@/Components/TextField.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
 import FileInput from "@/Components/FileInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import {useForm} from 'laravel-precognition-vue-inertia';
+import Select from "@/Components/Select.vue";
 
 const page = usePage();
 const props = defineProps({user: {type: Object}});
@@ -59,13 +59,13 @@ function submit() {
                               @change="form.validate('address')"
                               :error="form.errors.address"/>
 
-                    <SelectInput v-model="form.role"
-                                 :items="roles"
-                                 item-label="name"
-                                 item-value="value"
-                                 @change="form.validate('role')"
-                                 label="Roles"
-                                 required/>
+                    <Select v-model="form.role"
+                            :items="roles"
+                            item-label="name"
+                            item-value="value"
+                            @change="form.validate('role')"
+                            label="Roles"
+                            required/>
 
                     <FileInput v-model="form.image"
                                label="Profile Image"

@@ -1,6 +1,6 @@
 <script setup>
 import {debounce} from "lodash";
-import SelectInput from "@/Components/SelectInput.vue";
+import SelectInput from "@/Components/Select.vue";
 import Paginator from "@/Components/Paginator.vue";
 import {Link, router} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
