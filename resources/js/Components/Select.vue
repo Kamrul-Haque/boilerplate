@@ -19,6 +19,10 @@ const props = defineProps({
     height: {
         type: [String, Number],
     },
+    clearable: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const query = ref('');
@@ -161,7 +165,7 @@ onMounted(() => {
                     </ul>
                 </transition>
             </div>
-            <div v-if="query"
+            <div v-if="query && clearable"
                  class="absolute flex items-center text-xl text-primary right-0 mr-8 inset-y-0"
                  @click="query = ''">
                 <i class="mdi mdi-close"></i>

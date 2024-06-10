@@ -26,17 +26,32 @@ function handleFilePondInit() {
 </script>
 
 <template>
-    <div id="app">
+    <div class="mt-8 mb-4"
+         id="app">
         <file-pond
             name="test"
             ref="pond"
             class-name="my-pond"
-            label-idle="Drop files here..."
+            label-idle="Click to Upload or Drag & Drop"
             allow-multiple="true"
             accepted-file-types="image/jpeg, image/png"
             v-bind:files="files"
             v-on:init="handleFilePondInit"
-            :credits="false"
+            :credits="''"
         />
     </div>
 </template>
+
+<style>
+.filepond--root .filepond--drop-label {
+    border: 2px dashed rgb(229 231 235) !important;
+    border-radius: 0.375rem !important;
+    background-color: rgb(249 250 251) !important;
+    font-weight: bold !important;
+    color: rgb(107 114 128) !important;
+}
+
+.filepond--root .filepond--drop-label:hover {
+    background-color: white !important;
+}
+</style>
