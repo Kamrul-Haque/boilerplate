@@ -32,7 +32,7 @@ function submit() {
 
     <Admin>
         <div class="card w-full md:w-3/4 mx-auto">
-            <h1 class="card-header">Create User</h1>
+            <h1 class="card-header">{{ user ? 'Edit User' : 'Create User' }}</h1>
             <div class="card-body">
                 <form @submit.prevent="submit()">
                     <TextField v-model="form.name"

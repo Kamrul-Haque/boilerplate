@@ -28,7 +28,7 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
-    allowMultiple: Boolean,
+    multiple: Boolean,
     maximumFiles: Number,
     error: String,
     fileTypes: {
@@ -75,16 +75,15 @@ function update(pondFiles) {
         <file-pond
             name="test"
             ref="pond"
-            class="mb-0 pb-0"
+            class="pb-0 mb-0"
             class-name="my-pond"
             label-idle='Drag & Drop your files or <span class="filepond--label-action"> Browse </span>'
-            :allow-multiple="allowMultiple"
+            imagePreviewHeight="100"
+            :allow-multiple="multiple"
             :maxFiles="maximumFiles"
             :accepted-file-types="fileTypes"
             :files="files"
             :allowImagePreview="allowPreview"
-            imagePreviewHeight="150"
-            imagePreviewWidth="150"
             instant-upload="false"
             :credits="''"
             @init="handleFilePondInit"
@@ -95,14 +94,48 @@ function update(pondFiles) {
 
 <style>
 .filepond--root .filepond--drop-label {
-    border: 2px dashed rgb(229 231 235) !important;
-    border-radius: 0.375rem !important;
-    background-color: rgb(249 250 251) !important;
-    font-weight: bold !important;
-    color: rgb(107 114 128) !important;
+    background-color: rgb(249 250 251);
+    font-weight: bold;
+    color: rgb(107 114 128);
+    border: 2px dashed rgb(229 231 235);
+    border-radius: 0.375rem;
 }
 
 .filepond--root .filepond--drop-label:hover {
-    background-color: rgb(244, 244, 244) !important;
+    background-color: rgb(244, 244, 244);
+}
+
+.filepond--panel-root {
+    background-color: rgb(249 250 251);
+    border-bottom: 2px solid rgb(229 231 235);
+    border-left: 2px solid rgb(229 231 235);
+    border-right: 2px solid rgb(229 231 235);
+    border-radius: 0.375rem;
+}
+
+.filepond--panel-bottom .filepond--panel-root {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+ul.filepond--list {
+    margin-top: 7px !important;
+}
+
+.filepond--item {
+    width: calc(50% - 0.5em);
+}
+
+@media (min-width: 30em) {
+    .filepond--item {
+        width: calc(50% - 0.5em);
+    }
+}
+
+@media (min-width: 50em) {
+    .filepond--item {
+        width: calc(33.33% - 0.5em);
+    }
 }
 </style>
