@@ -120,7 +120,7 @@ onMounted(() => {
     if (props.modelValue !== null) {
         let item;
 
-        if (typeof props.items === 'object') {
+        if (typeof props.items[0] === 'object') {
             item = props.items.find(item => item[props.itemValue] === props.modelValue);
         } else {
             item = props.items.find(item => item === props.modelValue);

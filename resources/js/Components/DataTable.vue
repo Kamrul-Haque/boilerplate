@@ -1,10 +1,10 @@
 <script setup>
 import {debounce} from "lodash";
-import SelectInput from "@/Components/Select.vue";
 import Paginator from "@/Components/Paginator.vue";
 import {Link, router} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
 import {reactive, ref, watch} from "vue";
+import Select from "@/Components/Select.vue";
 
 const props = defineProps({
     headers: {
@@ -40,14 +40,15 @@ const props = defineProps({
     }
 });
 
-let params = reactive({
+const params = reactive({
     search: props.filters.search ? props.filters.search : '',
     sortBy: props.filters.sortBy ? props.filters.sortBy : null,
     sortDesc: !!props.filters.sortDesc,
     perPage: props.filters.perPage ? parseInt(props.filters.perPage) : 15,
 });
 
-let search = ref(params.search);
+const search = ref(params.search);
+const perPage = ref(params.perPage)
 
 watch(params, (newVal, oldVal) => {
     if (newVal.perPage !== oldVal.perPage) {
@@ -194,11 +195,11 @@ function sort(sortBy) {
                    for="perPage">
                 Items:
             </label>
-            <SelectInput v-model="params.perPage"
-                         class="min-w-[64px]"
-                         :height="10"
-                         :items="['5','10','15','20','25','30']"
-                         name="perPage"/>
+            <Select v-model="perPage"
+                    class="min-w-[64px]"
+                    :height="10"
+                    :items="['5','10','15','20','25','30']"
+                    name="perPage"/>
         </div>
     </div>
     <div v-if="$slots.bottom"

@@ -4,9 +4,9 @@ import {Head, usePage} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
-import FileInput from "@/Components/FileInput.vue";
 import {useForm} from 'laravel-precognition-vue-inertia';
 import Select from "@/Components/Select.vue";
+import DropZone from "@/Components/DropZone.vue";
 
 const page = usePage();
 const props = defineProps({user: {type: Object}});
@@ -67,11 +67,11 @@ function submit() {
                             label="Roles"
                             required/>
 
-                    <FileInput v-model="form.image"
-                               label="Profile Image"
-                               class="col-span-2"
-                               @change="form.validate('image')"
-                               :error="form.errors.image"/>
+                    <DropZone @files="form.image = $event"
+                              label="Profile Image"
+                              class="col-span-2"
+                              :error="form.errors.image"
+                              required/>
 
                     <div class="text-right mt-8">
                         <PrimaryButton type="submit">Save</PrimaryButton>

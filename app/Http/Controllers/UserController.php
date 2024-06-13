@@ -94,6 +94,8 @@ class UserController extends Controller
     {
         $valid = $request->validated();
 
+//        dd($valid);
+
         if ($request->hasFile('image'))
         {
             if ($user->getRawOriginal('image') && Storage::exists($user->getRawOriginal('image')))
