@@ -12,6 +12,11 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+//        $this->middleware('can:update-users')->only(['edit', 'update']);
+    }
+
     /**
      * Display a listing of the user.
      */

@@ -107,9 +107,7 @@ function update(pondFiles) {
 
 .filepond--panel-root {
     background-color: rgb(249 250 251);
-    border-bottom: 2px solid rgb(229 231 235);
-    border-left: 2px solid rgb(229 231 235);
-    border-right: 2px solid rgb(229 231 235);
+    border: 2px solid rgb(229 231 235);
     border-radius: 0.375rem;
 }
 
@@ -117,10 +115,6 @@ function update(pondFiles) {
     border: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
-}
-
-ul.filepond--list {
-    margin-top: 7px !important;
 }
 
 .filepond--item {
