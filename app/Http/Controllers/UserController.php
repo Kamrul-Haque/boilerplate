@@ -12,11 +12,6 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-//        $this->middleware('can:update-users')->only(['edit', 'update']);
-    }
-
     /**
      * Display a listing of the user.
      */
@@ -64,7 +59,7 @@ class UserController extends Controller
         $valid = $request->validated();
 
         if ($request->hasFile('image'))
-            $valid['image'] = $request->file('image')->storePublicly('ProfileImages');
+            $valid['image'] = $request->file('image')->store('ProfileImages');
 
         $password = Str::password(16);
         $valid['password'] = $password;
@@ -104,7 +99,7 @@ class UserController extends Controller
             if ($user->getRawOriginal('image') && Storage::exists($user->getRawOriginal('image')))
                 Storage::delete($user->getRawOriginal('image'));
 
-            $valid['image'] = $request->file('image')->storePublicly('ProfileImages');
+            $valid['image'] = $request->file('image')->store('ProfileImages');
         }
 
         $user->update($valid);
@@ -140,7 +135,12 @@ class UserController extends Controller
      */
     public function delete($user)
     {
-        User::onlyTrashed()->find($user)->forceDelete();
+        $user = User::onlyTrashed()->find($user);
+
+        if ($user->getRawOriginal('image') && Storage::exists($user->getRawOriginal('image')))
+            Storage::delete($user->getRawOriginal('image'));
+
+        $user->forceDelete();
 
         return to_route('users.index')->with('success', 'User deleted successfully');
     }

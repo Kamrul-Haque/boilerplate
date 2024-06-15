@@ -30,11 +30,11 @@ class SettingController extends Controller
 
         if ($request->hasFile('logo'))
         {
-            if (Storage::disk('s3')->exists($setting->getRawOriginal('logo')))
-                Storage::disk('s3')->delete($setting->getRawOriginal('logo'));
+            if (Storage::exists($setting->getRawOriginal('logo')))
+                Storage::delete($setting->getRawOriginal('logo'));
 
             $file = $request->file('logo');
-            $path = $file->storePublicly('logos', 's3');
+            $path = $file->storePublicly('logos', 'public');
 
             $valid['logo'] = $path;
         }
@@ -43,11 +43,11 @@ class SettingController extends Controller
 
         if ($request->hasFile('favicon'))
         {
-            if (Storage::disk('s3')->exists($setting->getRawOriginal('favicon')))
-                Storage::disk('s3')->delete($setting->getRawOriginal('favicon'));
+            if (Storage::exists($setting->getRawOriginal('favicon')))
+                Storage::delete($setting->getRawOriginal('favicon'));
 
             $file = $request->file('favicon');
-            $path = $file->storePublicly('logos', 's3');
+            $path = $file->storePublicly('logos', 'public');
 
             $valid['favicon'] = $path;
         }
@@ -56,11 +56,11 @@ class SettingController extends Controller
 
         if ($request->hasFile('footer_logo'))
         {
-            if (Storage::disk('s3')->exists($setting->getRawOriginal('footer_logo')))
-                Storage::disk('s3')->delete($setting->getRawOriginal('footer_logo'));
+            if (Storage::exists($setting->getRawOriginal('footer_logo')))
+                Storage::delete($setting->getRawOriginal('footer_logo'));
 
             $file = $request->file('footer_logo');
-            $path = $file->storePublicly('logos', 's3');
+            $path = $file->storePublicly('logos', 'public');
 
             $valid['footer_logo'] = $path;
         }
@@ -69,11 +69,11 @@ class SettingController extends Controller
 
         if ($request->hasFile('portal_logo'))
         {
-            if (Storage::disk('s3')->exists($setting->getRawOriginal('portal_logo')))
-                Storage::disk('s3')->delete($setting->getRawOriginal('portal_logo'));
+            if (Storage::exists($setting->getRawOriginal('portal_logo')))
+                Storage::delete($setting->getRawOriginal('portal_logo'));
 
             $file = $request->file('portal_logo');
-            $path = $file->storePublicly('logos', 's3');
+            $path = $file->storePublicly('logos', 'public');
 
             $valid['portal_logo'] = $path;
         }

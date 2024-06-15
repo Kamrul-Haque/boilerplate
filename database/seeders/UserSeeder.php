@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -15,22 +14,22 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Super Admin',
-            'email' => 'portaladmin@buyoniasoft.com',
-            'password' => bcrypt('Buyonia@2024'),
+            'email' => 'superadmin@buyoniasoft.com',
+            'password' => bcrypt('Test@2024'),
             'role' => 1,
         ]);
 
         User::create([
             'name' => 'Mr. Admin',
             'email' => 'admin@email.com',
-            'password' => bcrypt('Buyonia@2024'),
+            'password' => bcrypt('Test@2024'),
             'role' => 2,
         ]);
 
         User::create([
             'name' => 'Mr. User',
             'email' => 'user@email.com',
-            'password' => bcrypt('Buyonia@2024'),
+            'password' => bcrypt('Test@2024'),
             'role' => 3,
         ]);
 

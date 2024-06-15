@@ -57,7 +57,7 @@ function handleFilePondInit() {
 function update(pondFiles) {
     files = pondFiles.map(file => file.file)
 
-    props.allowMultiple === false
+    props.multiple === false
         ? emit("files", files[0])
         : emit("files", files);
 }

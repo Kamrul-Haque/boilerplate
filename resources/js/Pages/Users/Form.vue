@@ -69,9 +69,7 @@ function submit() {
 
                     <DropZone @files="form.image = $event"
                               label="Profile Image"
-                              class="col-span-2"
-                              :error="form.errors.image"
-                              required/>
+                              :error="form.errors.image"/>
 
                     <div class="text-right mt-8">
                         <PrimaryButton type="submit">Save</PrimaryButton>
