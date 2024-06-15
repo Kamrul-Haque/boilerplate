@@ -38,7 +38,9 @@ const form = useForm('post', route('settings.update', props.setting), {
 });
 
 function submit() {
-    form.submit({preserveScroll: true});
+    form.submit({
+        preserveState: (page) => Object.keys(page.props.errors).length > 0
+    });
 }
 </script>
 

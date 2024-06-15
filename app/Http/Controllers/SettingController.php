@@ -30,7 +30,7 @@ class SettingController extends Controller
 
         if ($request->hasFile('logo'))
         {
-            if (Storage::exists($setting->getRawOriginal('logo')))
+            if ($setting->getRawOriginal('logo') && Storage::exists($setting->getRawOriginal('logo')))
                 Storage::delete($setting->getRawOriginal('logo'));
 
             $file = $request->file('logo');
@@ -43,7 +43,7 @@ class SettingController extends Controller
 
         if ($request->hasFile('favicon'))
         {
-            if (Storage::exists($setting->getRawOriginal('favicon')))
+            if ($setting->getRawOriginal('favicon') && Storage::exists($setting->getRawOriginal('favicon')))
                 Storage::delete($setting->getRawOriginal('favicon'));
 
             $file = $request->file('favicon');
@@ -56,7 +56,7 @@ class SettingController extends Controller
 
         if ($request->hasFile('footer_logo'))
         {
-            if (Storage::exists($setting->getRawOriginal('footer_logo')))
+            if ($setting->getRawOriginal('footer_logo') && Storage::exists($setting->getRawOriginal('footer_logo')))
                 Storage::delete($setting->getRawOriginal('footer_logo'));
 
             $file = $request->file('footer_logo');
@@ -69,7 +69,7 @@ class SettingController extends Controller
 
         if ($request->hasFile('portal_logo'))
         {
-            if (Storage::exists($setting->getRawOriginal('portal_logo')))
+            if ($setting->getRawOriginal('portal_logo') && Storage::exists($setting->getRawOriginal('portal_logo')))
                 Storage::delete($setting->getRawOriginal('portal_logo'));
 
             $file = $request->file('portal_logo');
