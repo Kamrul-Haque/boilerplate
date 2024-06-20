@@ -47,7 +47,8 @@ class HandleInertiaRequests extends Middleware
             'settings' => [
                 'id' => $settings->id,
                 'name' => $settings->name,
-                'logo' => $settings->portal_logo,
+                'logo' => $settings->logo,
+                'portal_logo' => $settings->portal_logo,
                 'copyright_text' => $settings->copyright_text,
                 'primaryColor' => $settings->primary_color,
                 'secondaryColor' => $settings->secondary_color,

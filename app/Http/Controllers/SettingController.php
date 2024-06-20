@@ -80,9 +80,8 @@ class SettingController extends Controller
         else
             $valid = Arr::except($valid, 'portal_logo');
 
-        if ($setting->update($valid))
-            return back()->with('success', 'Updated Successfully');
+        $setting->update($valid);
 
-        return back()->with('error', 'Something Went Wrong');
+        return to_route('settings.edit', $setting)->with('success', 'Updated Successfully');
     }
 }

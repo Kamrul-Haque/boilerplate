@@ -9,7 +9,11 @@ import Select from "@/Components/Select.vue";
 import DropZone from "@/Components/DropZone.vue";
 
 const page = usePage();
-const props = defineProps({user: {type: Object}});
+const props = defineProps({
+    user: {
+        type: Object
+    }
+});
 const roles = page.props.auth.roles;
 
 const form = useForm('post', props.user ? route('users.update', props.user.id) : route('users.store'), {
@@ -69,6 +73,8 @@ function submit() {
 
                     <DropZone @files="form.image = $event"
                               label="Profile Image"
+                              types="image/png"
+                              :previous="[user.image]"
                               :error="form.errors.image"/>
 
                     <div class="text-right mt-8">

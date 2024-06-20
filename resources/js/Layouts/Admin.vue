@@ -24,11 +24,13 @@ const cssProps = computed(() => {
          :style="cssProps">
         <header class="header">
             <div class="brand">
-                <img :src="page.props.settings.logo"
+                <img v-if="page.props.settings.portal_logo"
+                     :src="page.props.settings.portal_logo"
                      class="avatar"
                      alt="logo"
                      width="50"
                      height="50"/>
+
                 <h1 class="brand-title">
                     {{ page.props.settings.name }}
                 </h1>
@@ -42,7 +44,8 @@ const cssProps = computed(() => {
                           class="mdi mdi-chevron-right-box text-2xl"></span>
                 </button>
 
-                <img :src="page.props.settings.logo"
+                <img v-if="page.props.settings.portal_logo"
+                     :src="page.props.settings.portal_logo"
                      class="avatar md:hidden"
                      alt="logo"
                      width="50"

@@ -16,7 +16,7 @@ class AlphaNumericSpace implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!preg_match('/^[\pL\pM\pN\s]+$/u', $value))
+        if (!preg_match('/^[\pL\pM\pN\s.]+$/u', $value))
             $fail('The :attribute may only contain letters, numbers and spaces.');
     }
 }

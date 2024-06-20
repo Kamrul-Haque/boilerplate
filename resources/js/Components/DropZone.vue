@@ -24,25 +24,25 @@ const FilePond = vueFilePond(
 const props = defineProps({
     label: String,
     required: Boolean,
-    allowPreview: {
+    preview: {
         type: Boolean,
         default: true
     },
     multiple: Boolean,
-    maximumFiles: Number,
+    maximum: Number,
     error: String,
-    fileTypes: {
+    types: {
         type: String,
         default: 'image/jpg, image/jpeg, image/png'
     },
-    previousFiles: {
-        type: Array,
+    previous: {
+        type: [Array, Object],
         default: null
-    },
-    mandatoryFieldSign: Boolean
+    }
 })
 
 let files = reactive([]);
+let showPrevious = ref(!!props.previous);
 const emit = defineEmits(["files"]);
 
 const pond = ref(null);
@@ -60,6 +60,8 @@ function update(pondFiles) {
     props.multiple === false
         ? emit("files", files[0])
         : emit("files", files);
+
+    showPrevious.value = !(props.previous && files.length !== 0);
 }
 </script>
 
@@ -80,15 +82,32 @@ function update(pondFiles) {
             label-idle='Drag & Drop your files or <span class="filepond--label-action"> Browse </span>'
             imagePreviewHeight="100"
             :allow-multiple="multiple"
-            :maxFiles="maximumFiles"
-            :accepted-file-types="fileTypes"
+            :maxFiles="maximum"
+            :accepted-file-types="types"
             :files="files"
-            :allowImagePreview="allowPreview"
+            :allowImagePreview="preview"
             instant-upload="false"
             :credits="''"
             @init="handleFilePondInit"
             @updatefiles="update"
         />
+
+        <div v-if="showPrevious">
+            <label v-if="label"
+                   class="label capitalize">
+                Previous Files
+            </label>
+            <div class="previous-container">
+                <div class="items-container">
+                    <div v-for="(item, index) in previous"
+                         class="image-card">
+                        <img :src="item"
+                             :alt="'item'+index">
+                        <div class="filename">Screenshot from 2024-06-20 14-04-37.png</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -121,6 +140,22 @@ function update(pondFiles) {
     width: calc(50% - 0.5em);
 }
 
+.previous-items {
+    display: flex;
+}
+
+.previous-item-wrapper {
+    margin: 5px;
+    width: calc(50% - 0.5em);
+    max-height: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.previous-item {
+    object-fit: contain;
+}
+
 @media (min-width: 30em) {
     .filepond--item {
         width: calc(50% - 0.5em);
@@ -131,5 +166,36 @@ function update(pondFiles) {
     .filepond--item {
         width: calc(33.33% - 0.5em);
     }
+}
+
+.previous-container {
+    display: flex;
+    min-height: 100px;
+    background-color: rgb(249 250 251);
+    border: 2px solid rgb(229 231 235);
+    border-radius: 0.375rem;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.items-container {
+    width: calc(50% - 0.5em);
+    display: flex;
+    margin: 5px;
+}
+
+.image-card {
+    width: auto;
+    height: 100px;
+    position: relative;
+    background-color: lightgrey;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure the full image is displayed */
 }
 </style>
