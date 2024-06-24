@@ -92,7 +92,7 @@ function update(pondFiles) {
             @updatefiles="update"
         />
 
-        <div v-if="showPrevious">
+        <div v-if="showPrevious && previous[0]">
             <label v-if="label"
                    class="label capitalize">
                 Previous Files

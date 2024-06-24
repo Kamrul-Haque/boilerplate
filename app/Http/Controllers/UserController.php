@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Mail\AccountCreationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -101,6 +102,8 @@ class UserController extends Controller
 
             $valid['image'] = $request->file('image')->store('ProfileImages');
         }
+        else
+            $valid = Arr::except($valid, 'image');
 
         $user->update($valid);
 
