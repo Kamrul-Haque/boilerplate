@@ -1,5 +1,5 @@
 <script setup>
-import {computed, nextTick, onMounted, ref, watch} from "vue";
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: {
@@ -121,16 +121,34 @@ function scrollToHighlightedItem() {
     }
 }
 
+function handleBlur(event) {
+    if (!preventBlur.value && !input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
+        focused.value = false;
+    }
+}
+
 const input = ref(null);
 const suggestionList = ref(null);
 
 onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
+    document.addEventListener('click', handleGlobalClick);
+
+    /*if (input.value.hasAttribute('autofocus')) {
         input.value.focus();
-    }
+    }*/
 
     updateQuery();
 });
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleGlobalClick);
+});
+
+function handleGlobalClick(event) {
+    if (!input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
+        focused.value = false;
+    }
+}
 </script>
 
 <template>
@@ -158,7 +176,7 @@ onMounted(() => {
                        autocomplete="off"
                        @keydown="handleKeyDown"
                        @focus="focused = true"
-                       @blur="() => { if (!preventBlur) focused = false; }"
+                       @blur="handleBlur"
                        ref="input"
                        readonly/>
                 <transition name="fade">
@@ -168,7 +186,7 @@ onMounted(() => {
                         <li v-for="(suggestion, index) in filteredSuggestions"
                             :key="index"
                             @mousedown="toggleItem(suggestion)"
-                            :class="['p-2 cursor-pointer rounded flex items-center', selectedItems.includes(typeof suggestion === 'object' ? suggestion[itemValue] : suggestion) ? '' : 'hover:bg-primary hover:text-white']">
+                            class="p-2 cursor-pointer rounded flex items-center">
                             <input type="checkbox"
                                    :checked="selectedItems.includes(typeof suggestion === 'object' ? suggestion[itemValue] : suggestion)"
                                    class="mr-2">

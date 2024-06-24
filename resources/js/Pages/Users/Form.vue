@@ -6,7 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
 import {useForm} from 'laravel-precognition-vue-inertia';
 import DropZone from "@/Components/DropZone.vue";
-import Select from "@/Components/Select.vue";
+import MultiSelect from "@/Components/MultiSelect.vue";
 
 const page = usePage();
 const props = defineProps({
@@ -22,7 +22,7 @@ const form = useForm('post', props.user ? route('users.update', props.user.id) :
     email: props.user ? props.user.email : null,
     phone: props.user ? props.user.phone : null,
     address: props.user ? props.user.address : null,
-    role: props.user ? props.user.role : null,
+    role: props.user ? [props.user.role] : [],
     image: null,
 });
 
@@ -63,14 +63,14 @@ function submit() {
                               @change="form.validate('address')"
                               :error="form.errors.address"/>
 
-                    <Select v-model="form.role"
-                            :items="roles"
-                            item-label="name"
-                            item-value="value"
-                            @change="form.validate('role')"
-                            label="Roles"
-                            clearable
-                            required/>
+                    <MultiSelect v-model="form.role"
+                                 :items="roles"
+                                 item-label="name"
+                                 item-value="value"
+                                 @change="form.validate('role')"
+                                 label="Roles"
+                                 clearable
+                                 required/>
 
                     <DropZone @files="form.image = $event"
                               label="Profile Image"
