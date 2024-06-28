@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Roles;
+use App\Enums\Role;
 use App\Rules\AlphaSpace;
 use App\Rules\Phone;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -32,7 +32,7 @@ class UserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
             'phone' => ['nullable', new Phone, 'max:255', Rule::unique('users')->ignore($this->user)],
             'address' => ['nullable', 'string', 'max:255'],
-            'role' => ['required', new Enum(Roles::class)],
+            'role' => ['required', new Enum(Role::class)],
             'image' => [...$this->isPrecognitive() ? [] : ['nullable'], 'image', 'max:5120'],
         ];
     }

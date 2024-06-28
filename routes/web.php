@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Roles;
+use App\Enums\Role;
 use App\Http\Controllers;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -41,13 +41,13 @@ Route::middleware('precognitive')->group(function () {
         Route::delete('/profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    Route::middleware('permit:' . Roles::ADMIN->value)->group(function () {
+    Route::middleware('permit:' . Role::ADMIN->value)->group(function () {
         Route::resource('users', Controllers\UserController::class);
         Route::put('users/{user}/restore', [Controllers\UserController::class, 'restore'])->name('users.restore');
         Route::delete('users/{user}/delete', [Controllers\UserController::class, 'delete'])->name('users.delete');
     });
 
-    Route::middleware('permit:' . Roles::SUPER_ADMIN->value)->group(function () {
+    Route::middleware('permit:' . Role::SUPER_ADMIN->value)->group(function () {
         Route::resource('settings', Controllers\SettingController::class)->only('edit', 'update');
     });
 });
