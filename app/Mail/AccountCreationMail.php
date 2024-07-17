@@ -33,7 +33,7 @@ class AccountCreationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Account Creation Mail',
+            subject: 'Account Created',
         );
     }
 

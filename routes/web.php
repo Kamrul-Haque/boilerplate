@@ -1,53 +1,45 @@
 <?php
 
 use App\Enums\Role;
-use App\Http\Controllers;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers as Controllers;
+use App\Http\Controllers\Admin as AdminControllers;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 require __DIR__ . '/auth.php';
 
+Route::get('auth/{provider}/redirect', [Controllers\AuthProviderController::class, 'redirectToProvider'])
+     ->name('auth.provider.redirect');
+Route::get('auth/{provider}/callback', [Controllers\AuthProviderController::class, 'handleProviderCallback'])
+     ->name('auth.provider.callback');
+
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+    return inertia('Home');
+})->name('home');
 
 Route::middleware('precognitive')->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', Controllers\DashboardController::class)
+         ->middleware(['auth', 'verified'])
+         ->name('dashboard');
 
-    Route::get('users/{user}/image', [Controllers\UserController::class, 'getImage'])->name('users.image');
+    Route::get('users/{user}/image', [AdminControllers\UserController::class, 'getImage'])->name('users.image');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [Controllers\ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [Controllers\ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
 
-    Route::middleware('permit:' . Role::ADMIN->value)->group(function () {
-        Route::resource('users', Controllers\UserController::class);
-        Route::put('users/{user}/restore', [Controllers\UserController::class, 'restore'])->name('users.restore');
-        Route::delete('users/{user}/delete', [Controllers\UserController::class, 'delete'])->name('users.delete');
-    });
+        Route::prefix('admin')->as('admin.')->group(function () {
+            Route::middleware('permit:' . Role::ADMIN->value)->group(function () {
+                Route::resource('users', AdminControllers\UserController::class);
+                Route::delete('users/{user}/deactivate', [AdminControllers\UserController::class, 'deactivate'])
+                     ->name('users.deactivate');
+                Route::put('users/{user}/restore', [AdminControllers\UserController::class, 'restore'])
+                     ->name('users.restore');
+            });
 
-    Route::middleware('permit:' . Role::SUPER_ADMIN->value)->group(function () {
-        Route::resource('settings', Controllers\SettingController::class)->only('edit', 'update');
+            Route::middleware('permit:' . Role::SUPER_ADMIN->value)->group(function () {
+                Route::resource('settings', AdminControllers\SettingController::class)->only('edit', 'update');
+            });
+        });
     });
 });

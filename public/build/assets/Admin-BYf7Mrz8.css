@@ -1,0 +1,1 @@
+:root{--primary: var(--primary);--secondary: var(--secondary);--accent: var(--accent);--background: var(--background);--table-stripe-color: var(--table-stripe-color)}select option{text-transform:capitalize}td{max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

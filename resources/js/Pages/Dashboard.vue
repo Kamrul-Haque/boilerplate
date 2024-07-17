@@ -1,32 +1,19 @@
 <script setup>
-import Admin from '@/Layouts/Admin.vue';
-import {Head} from '@inertiajs/vue3';
-import {ref} from "vue";
+import {Head, usePage} from '@inertiajs/vue3';
+import Admin from "@/Layouts/Admin.vue";
 
-let value = ref(false);
-const suggestions = [
-    {id: 1, name: 'Apple'},
-    {id: 2, name: 'Banana'},
-    {id: 3, name: 'Cherry'},
-    {id: 4, name: 'Date'},
-    {id: 5, name: 'Elderberry'},
-    {id: 6, name: 'Fig'},
-    {id: 7, name: 'Grape'},
-    {id: 8, name: 'Honeydew'},
-];
-const fruit = ref(null)
+const page = usePage();
 </script>
 
 <template>
     <Head title="Dashboard"/>
-
     <Admin>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-        </template>
-
-        <div class="card">
-            <div class="card-body">You're logged in!</div>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">You're logged in!</div>
+                </div>
+            </div>
         </div>
     </Admin>
 </template>

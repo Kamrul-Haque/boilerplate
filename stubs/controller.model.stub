@@ -58,9 +58,9 @@ class {{ class }} extends Controller
     }
 
     /**
-     * Remove the specified {{ modelVariable }} from storage.
+     * Deactivate the specified {{ modelVariable }}.
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function deactivate(int ${{ modelVariable }})
     {
         //
     }
@@ -74,9 +74,9 @@ class {{ class }} extends Controller
     }
 
     /**
-     * Delete the specified {{ modelVariable }} from database.
+     * Remove the specified {{ modelVariable }} from storage.
      */
-    public function deactivate(int ${{ modelVariable }})
+    public function destroy({{ model }} ${{ modelVariable }})
     {
         //
     }

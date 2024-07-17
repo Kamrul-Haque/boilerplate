@@ -1,9 +1,9 @@
 <script setup>
-import Guest from '@/Layouts/Guest.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextField from '@/Components/TextField.vue';
 import {Head} from '@inertiajs/vue3';
 import {useForm} from 'laravel-precognition-vue-inertia'
+import Auth from "@/Layouts/Auth.vue";
 
 const props = defineProps({
     email: {
@@ -31,34 +31,40 @@ const submit = () => {
 </script>
 
 <template>
-    <Guest>
+    <Auth>
         <Head title="Reset Password"/>
 
-        <form @submit.prevent="submit">
-            <TextField type="email"
-                       label="Email"
-                       v-model="form.email"
-                       :error="form.errors.email"
-                       required/>
+        <div class="card mx-auto w-full md:w-1/3">
+            <h1 class="card-header">Reset Password</h1>
+            <div class="card-body">
+                <form @submit.prevent="submit">
+                    <TextField type="email"
+                               label="Email"
+                               v-model="form.email"
+                               :error="form.errors.email"
+                               required/>
 
-            <TextField type="password"
-                       label="Password"
-                       v-model="form.password"
-                       :error="form.errors.password"
-                       required/>
+                    <TextField type="password"
+                               label="Password"
+                               v-model="form.password"
+                               :error="form.errors.password"
+                               required/>
 
-            <TextField type="password"
-                       label="Confirm Password"
-                       v-model="form.password_confirmation"
-                       :error="form.errors.password_confirmation"
-                       required/>
+                    <TextField type="password"
+                               label="Confirm Password"
+                               v-model="form.password_confirmation"
+                               :error="form.errors.password_confirmation"
+                               required/>
 
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }"
-                               :disabled="form.processing">
-                    Reset Password
-                </PrimaryButton>
+                    <div class="mt-4">
+                        <PrimaryButton :class="{ 'opacity-25': form.processing }"
+                                       :disabled="form.processing"
+                                       block>
+                            Reset Password
+                        </PrimaryButton>
+                    </div>
+                </form>
             </div>
-        </form>
-    </Guest>
+        </div>
+    </Auth>
 </template>

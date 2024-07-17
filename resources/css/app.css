@@ -10,8 +10,12 @@
         @apply bg-white rounded p-[2px];
     }
 
+    .avatar-circle {
+        @apply rounded-full w-8 h-8 bg-gray-200 flex items-center justify-center text-2xl border border-gray-300;
+    }
+
     .brand {
-        @apply hidden md:flex fixed h-[64px] w-64 px-5 text-white items-center transition-all ease-in-out duration-300;
+        @apply hidden md:flex h-[64px] w-full p-4 border-b border-gray-200 text-gray-700 items-center transition-all ease-in-out duration-300;
     }
 
     .brand-title {
@@ -23,19 +27,19 @@
     }
 
     .header {
-        @apply flex h-[64px] md:top-0 z-20 w-full fixed shadow-md;
+        @apply flex w-full h-[64px] md:top-0 z-20 shadow-sm rounded-lg fixed;
     }
 
     .nav {
-        @apply w-full md:pl-64 bg-primary text-gray-300 flex justify-between items-center transition-all ease-in-out duration-300;
+        @apply w-full bg-white text-gray-900 flex justify-between items-center transition-all ease-in-out duration-300 rounded-lg;
     }
 
     .header-link {
-        @apply inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-gray-300 bg-transparent hover:text-white active:text-white focus:outline-none focus:text-white transition ease-in-out duration-150;
+        @apply inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-gray-700 bg-transparent hover:text-gray-500 active:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150;
     }
 
     .side-nav {
-        @apply fixed h-full p-0 md:p-2 md:h-screen left-0 bottom-0 top-[64px] md:max-h-[calc(100%-64px)] translate-x-0 bg-secondary text-gray-300 transition-all ease-in-out duration-300 shadow-md z-10 md:z-10;
+        @apply fixed h-full p-0 md:p-2 md:h-screen left-0 bottom-0 top-0 md:max-h-full translate-x-0 bg-white text-gray-700 transition-all ease-in-out duration-300 shadow-sm rounded-lg z-10 md:z-10;
     }
 
     .content {
@@ -71,7 +75,7 @@
     }
 
     .btn {
-        @apply inline-flex items-center px-4 py-2 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 rounded;
+        @apply inline-flex justify-center items-center px-4 py-2 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-150 rounded;
     }
 
     .btn-primary {
@@ -84,6 +88,10 @@
 
     .btn-danger {
         @apply bg-error hover:bg-error focus:bg-error focus:ring-error active:bg-error;
+    }
+
+    .btn-dark {
+        @apply bg-gray-900 text-white hover:bg-gray-900 focus:bg-gray-900 focus:ring-gray-900 active:bg-gray-900;
     }
 
     .label {
@@ -100,5 +108,17 @@
 
     .validation-error {
         @apply text-xs text-error;
+    }
+
+    .separator-row {
+        @apply flex text-center items-center my-2;
+    }
+
+    .separator {
+        @apply border-t border-t-gray-200 flex-auto min-w-1 mt-[8px] pt-[8px];
+    }
+
+    .separator-label {
+        @apply text-gray-400 mx-2;
     }
 }

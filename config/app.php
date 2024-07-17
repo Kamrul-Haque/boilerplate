@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool)env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,8 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'users_default_timezone' => env('USERS_DEFAULT_TIMEZONE'),
-
-    'date_format' => env('APP_DATE_FORMAT', 'd/m/Y'),
-    'time_format' => env('APP_TIME_FORMAT', 'h:i a'),
 ];

@@ -1,6 +1,6 @@
 {{--@formatter:off--}}
 <x-mail::message>
-# Account Created
+# Welcome Aboard
 
 Dear {{ $user->name }},<br>
 we have created an account so that you can access our online platform.

@@ -2,8 +2,8 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextField.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import TextField from '@/Components/TextField.vue';
+import {Link, useForm, usePage} from '@inertiajs/vue3';
 
 defineProps({
     mustVerifyEmail: {
@@ -32,11 +32,13 @@ const form = useForm({
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('profile.update'))"
+              class="mt-6 space-y-6">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name"
+                            value="Name"/>
 
-                <TextInput
+                <TextField
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
@@ -46,13 +48,15 @@ const form = useForm({
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2"
+                            :message="form.errors.name"/>
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email"
+                            value="Email"/>
 
-                <TextInput
+                <TextField
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -61,7 +65,8 @@ const form = useForm({
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2"
+                            :message="form.errors.email"/>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -94,7 +99,8 @@ const form = useForm({
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
+                    <p v-if="form.recentlySuccessful"
+                       class="text-sm text-gray-600">Saved.</p>
                 </Transition>
             </div>
         </form>

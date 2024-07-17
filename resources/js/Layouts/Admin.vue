@@ -5,6 +5,7 @@ import SideBarLinks from "@/Components/SideBarLinks.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
 import {computed, ref} from "vue";
 import {usePage} from "@inertiajs/vue3";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const page = usePage();
 let showSideBar = ref(screen.width >= 640)
@@ -22,7 +23,8 @@ const cssProps = computed(() => {
 <template>
     <div class="app"
          :style="cssProps">
-        <header class="header">
+        <nav :class="[showSideBar ? 'w-64' : 'w-0 md:w-[75px]']"
+             class="side-nav">
             <div class="brand">
                 <img v-if="page.props.settings.portal_logo"
                      :src="page.props.settings.portal_logo"
@@ -31,17 +33,24 @@ const cssProps = computed(() => {
                      width="50"
                      height="50"/>
 
-                <h1 class="brand-title">
+                <ApplicationLogo class="text-2xl text-center"
+                                 v-else/>
+
+                <h1 v-if="showSideBar"
+                    class="brand-title">
                     {{ page.props.settings.name }}
                 </h1>
             </div>
+            <div class="overflow-y-auto overflow-x-hidden">
+                <SideBarLinks :show-side-bar="showSideBar"/>
+            </div>
+        </nav>
+        <header class="header"
+                :class="[showSideBar ? 'md:ml-[264px] md:w-[calc(100%-264px)]' : 'md:ml-[82px] md:w-[calc(100%-82px)]']">
             <div class="nav">
                 <button @click="showSideBar = !showSideBar"
-                        class="mx-4 hover:text-white active:text-white transition ease-in-out duration-150">
-                    <span v-if="showSideBar"
-                          class="mdi mdi-chevron-left-box text-2xl"></span>
-                    <span v-else
-                          class="mdi mdi-chevron-right-box text-2xl"></span>
+                        class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150">
+                    <i class="mdi mdi-menu"></i>
                 </button>
 
                 <img v-if="page.props.settings.portal_logo"
@@ -79,14 +88,8 @@ const cssProps = computed(() => {
                 </Dropdown>
             </div>
         </header>
-        <nav :class="[showSideBar ? 'w-64' : 'w-0 md:w-[75px]']"
-             class="side-nav">
-            <div class="overflow-y-auto overflow-x-hidden">
-                <SideBarLinks :show-side-bar="showSideBar"/>
-            </div>
-        </nav>
         <div class="content"
-             :class="[showSideBar ? 'md:pl-[256px]' : 'md:pl-20']">
+             :class="[showSideBar ? 'md:pl-[256px]' : 'md:pl-[74px]']">
             <main class="main">
                 <div class="container">
                     <FlashMessage/>
@@ -96,7 +99,7 @@ const cssProps = computed(() => {
             </main>
         </div>
         <footer class="footer"
-                :class="[showSideBar ? 'pl-64' : 'pl-0 md:pl-[75px]']">
+                :class="[showSideBar ? 'pl-64' : 'pl-0 md:pl-[74px]']">
             {{ page.props.settings.copyright_text }}
             Developed by
             <a href="https://www.linkedin.com/in/utchas/"
@@ -119,5 +122,12 @@ const cssProps = computed(() => {
 
 select option {
     text-transform: capitalize;
+}
+
+td {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

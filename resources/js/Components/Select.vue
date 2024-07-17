@@ -1,5 +1,5 @@
 <script setup>
-import {computed, nextTick, onMounted, ref, watch} from "vue";
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: {
@@ -45,7 +45,10 @@ function selectItem(suggestion) {
     focused.value = false;
     highlightedIndex.value = -1;
 
-    emit('update:modelValue', suggestion[props.itemValue]);
+    if (typeof suggestion === 'object')
+        emit('update:modelValue', suggestion[props.itemValue]);
+    else
+        emit('update:modelValue', suggestion);
 }
 
 watch(query, () => {
@@ -53,7 +56,13 @@ watch(query, () => {
         input.value.focus();
         emit('update:modelValue', null);
     }
-})
+});
+
+function handleBlur(event) {
+    if (!preventBlur.value && !input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
+        focused.value = false;
+    }
+}
 
 function handleKeyDown(event) {
     if (event.key === 'ArrowDown') {
@@ -106,9 +115,8 @@ const input = ref(null);
 const suggestionList = ref(null);
 
 onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
-        input.value.focus();
-    }
+    window.addEventListener('resize', checkDropdownPosition);
+    document.addEventListener('click', handleGlobalClick);
 
     if (props.modelValue !== null) {
         let item;
@@ -121,6 +129,30 @@ onMounted(() => {
 
         selectItem(item);
     }
+});
+
+function handleGlobalClick(event) {
+    if (!input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
+        focused.value = false;
+    }
+}
+
+const dropdownPosition = ref('bottom-0');
+const autocompleteContainer = ref(null);
+
+const checkDropdownPosition = () => {
+    const inputRect = autocompleteContainer.value.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    const spaceBelow = windowHeight - inputRect.bottom;
+    const dropdownHeight = 200;
+
+    focused.value = true;
+    dropdownPosition.value = spaceBelow >= dropdownHeight ? 'top-full mt-1' : 'bottom-full mb-1';
+};
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleGlobalClick);
+    window.removeEventListener('resize', checkDropdownPosition);
 });
 </script>
 
@@ -138,8 +170,9 @@ onMounted(() => {
                 <i :class="prependIcon"></i>
             </div>
             <div class="relative w-full"
+                 ref="autocompleteContainer"
                  @focus="focused">
-                <input class="input"
+                <input class="input capitalize"
                        :class="[error ? 'border-error' : 'border-gray-200', prependIcon ? 'pl-9' : '', rounded ? 'rounded-full' : 'rounded-md', height ? `h-${height}` : '']"
                        v-model="query"
                        type="text"
@@ -148,18 +181,19 @@ onMounted(() => {
                        :autofocus="autofocus"
                        autocomplete="off"
                        @keydown="handleKeyDown"
-                       @focus="focused = true"
-                       @blur="() => { if (!preventBlur) focused = false; }"
+                       @focus="checkDropdownPosition"
+                       @blur="handleBlur"
                        ref="input"
                        readonly/>
                 <transition name="fade">
                     <ul v-show="filteredSuggestions.length && focused"
                         class="absolute w-full bg-white border rounded mt-1 p-1 max-h-48 overflow-y-auto z-10"
+                        :class="dropdownPosition"
                         ref="suggestionList">
                         <li v-for="(suggestion, index) in filteredSuggestions"
                             :key="index"
                             @mousedown="selectItem(suggestion)"
-                            :class="['p-2 cursor-pointer rounded', highlightedIndex === index ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white']">
+                            :class="['p-2 cursor-pointer rounded capitalize', highlightedIndex === index ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white']">
                             {{ typeof suggestion === 'object' ? suggestion[itemLabel] : suggestion }}
                         </li>
                     </ul>

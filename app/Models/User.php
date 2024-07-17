@@ -15,15 +15,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'address',
-        'password',
-        'role',
-        'image'
-    ];
+    protected $guarded = ['id'];
 
     protected $hidden = [
         'password',
@@ -62,13 +54,18 @@ class User extends Authenticatable
         return null;
     }
 
+    public function hasRole($role): bool
+    {
+        return auth()->user()->role->value === $role;
+    }
+
     /**
-     * Checks if the user has access by the given role
+     * Checks if the user has the given role or higher
      *
      * @param int $role
      * @return bool
      */
-    public function hasAccess(int $role): bool
+    public function hasRoleOrHigher(int $role): bool
     {
         return auth()->user()->role->value <= $role;
     }

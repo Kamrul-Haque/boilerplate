@@ -25,7 +25,7 @@ watch(show, () => {
 <template>
     <div>
         <div v-if="flash.success && show"
-             class="flex justify-between bg-green-500 bg-opacity-25 rounded-lg p-4 mb-4 text-sm text-success w-full break-all"
+             class="flex justify-between bg-white border border-success rounded-lg p-4 bottom-10 fixed right-5 z-10 text-sm text-success w-full md:w-1/3 break-all"
              role="alert">
             <div class="flex-1">
                 <span class="mdi mdi-check-circle text-lg mr-4"></span>
@@ -35,7 +35,7 @@ watch(show, () => {
                   @click="show=false"></span>
         </div>
         <div v-if="flash.error && show"
-             class="flex justify-between bg-red-500 bg-opacity-25 rounded-lg p-4 mb-4 text-sm text-error w-full break-all"
+             class="flex justify-between bg-white border border-error rounded-lg p-4 bottom-10 fixed right-5 z-10 text-sm text-error w-full md:w-1/3 break-all"
              role="alert">
             <div class="flex-1">
                 <span class="mdi mdi-alert-circle text-lg mr-4"></span>

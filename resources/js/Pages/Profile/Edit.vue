@@ -2,7 +2,8 @@
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
+import Auth from "@/Layouts/Auth.vue";
 import Admin from "@/Layouts/Admin.vue";
 
 defineProps({
@@ -13,12 +14,14 @@ defineProps({
         type: String,
     },
 });
+
+const page = usePage();
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="Profile"/>
 
-    <Admin>
+    <Component :is="page.props.auth.user.role < 3 ? Admin : Auth">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
         </template>
@@ -34,13 +37,13 @@ defineProps({
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <UpdatePasswordForm class="max-w-xl" />
+                    <UpdatePasswordForm class="max-w-xl"/>
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <DeleteUserForm class="max-w-xl" />
+                    <DeleteUserForm class="max-w-xl"/>
                 </div>
             </div>
         </div>
-    </Admin>
+    </Component>
 </template>

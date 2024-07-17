@@ -1,9 +1,8 @@
 <script setup>
-import {debounce} from "lodash";
 import Paginator from "@/Components/Paginator.vue";
 import {Link, router} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
-import {reactive, ref, watch} from "vue";
+import {reactive, watch} from "vue";
 import Select from "@/Components/Select.vue";
 
 const props = defineProps({
@@ -41,14 +40,12 @@ const props = defineProps({
 });
 
 const params = reactive({
+    page: props.filters.page ? props.filters.page : 1,
     search: props.filters.search ? props.filters.search : '',
     sortBy: props.filters.sortBy ? props.filters.sortBy : null,
     sortDesc: !!props.filters.sortDesc,
     perPage: props.filters.perPage ? parseInt(props.filters.perPage) : 15,
 });
-
-const search = ref(params.search);
-const perPage = ref(params.perPage)
 
 watch(params, (newVal, oldVal) => {
     if (newVal.perPage !== oldVal.perPage) {
@@ -59,13 +56,6 @@ watch(params, (newVal, oldVal) => {
     deep: true
 });
 
-watch(search, debounce((value) => {
-    if (value) {
-        params.search = value;
-        updateData();
-    }
-}, 500));
-
 async function updateData() {
     router.get(props.indexRoute, params, {
         preserveScroll: true,
@@ -74,7 +64,6 @@ async function updateData() {
     });
 }
 
-// Method to handle sorting
 function sort(sortBy) {
     if (params.sortBy === sortBy) {
         params.sortDesc = !params.sortDesc;
@@ -82,6 +71,7 @@ function sort(sortBy) {
         params.sortBy = sortBy;
         params.sortDesc = false;
     }
+
     updateData();
 }
 </script>
@@ -195,7 +185,7 @@ function sort(sortBy) {
                    for="perPage">
                 Items:
             </label>
-            <Select v-model="perPage"
+            <Select v-model="params.perPage"
                     class="min-w-[64px]"
                     :height="10"
                     :items="['5','10','15','20','25','30']"

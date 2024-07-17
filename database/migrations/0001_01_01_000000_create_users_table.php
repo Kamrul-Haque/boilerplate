@@ -17,9 +17,13 @@ return new class extends Migration {
             $table->string('phone')->nullable()->unique();
             $table->string('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->tinyInteger('role')->default(3);
             $table->string('image')->nullable();
+            $table->string('auth_provider_type')->nullable();
+            $table->string('auth_provider_id')->nullable();
+            $table->string('auth_provider_token')->nullable();
+            $table->string('auth_provider_refresh_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

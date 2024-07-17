@@ -37,7 +37,7 @@ const props = defineProps({
 }
 
 .page-link-active {
-    background: #222222;
+    background: var(--primary);
     color: white !important;
 }
 

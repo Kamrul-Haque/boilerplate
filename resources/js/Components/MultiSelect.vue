@@ -133,15 +133,7 @@ const suggestionList = ref(null);
 onMounted(() => {
     document.addEventListener('click', handleGlobalClick);
 
-    /*if (input.value.hasAttribute('autofocus')) {
-        input.value.focus();
-    }*/
-
     updateQuery();
-});
-
-onUnmounted(() => {
-    document.removeEventListener('click', handleGlobalClick);
 });
 
 function handleGlobalClick(event) {
@@ -149,6 +141,24 @@ function handleGlobalClick(event) {
         focused.value = false;
     }
 }
+
+const dropdownPosition = ref('bottom-0');
+const autocompleteContainer = ref(null);
+
+const checkDropdownPosition = () => {
+    const inputRect = autocompleteContainer.value.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    const spaceBelow = windowHeight - inputRect.bottom;
+    const dropdownHeight = 200;
+
+    focused.value = true;
+    dropdownPosition.value = spaceBelow >= dropdownHeight ? 'top-full mt-1' : 'bottom-full mb-1';
+};
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleGlobalClick);
+    window.removeEventListener('resize', checkDropdownPosition);
+});
 </script>
 
 <template>
@@ -165,6 +175,7 @@ function handleGlobalClick(event) {
                 <i :class="prependIcon"></i>
             </div>
             <div class="relative w-full"
+                 ref="autocompleteContainer"
                  @focus="focused">
                 <input class="input"
                        :class="[error ? 'border-error' : 'border-gray-200', prependIcon ? 'pl-9' : '', rounded ? 'rounded-full' : 'rounded-md', height ? `h-${height}` : '']"
@@ -175,13 +186,14 @@ function handleGlobalClick(event) {
                        :autofocus="autofocus"
                        autocomplete="off"
                        @keydown="handleKeyDown"
-                       @focus="focused = true"
+                       @focus="checkDropdownPosition"
                        @blur="handleBlur"
                        ref="input"
                        readonly/>
                 <transition name="fade">
                     <ul v-show="filteredSuggestions.length && focused"
                         class="absolute w-full bg-white border rounded mt-1 p-1 max-h-48 overflow-y-auto z-10"
+                        :class="dropdownPosition"
                         ref="suggestionList">
                         <li v-for="(suggestion, index) in filteredSuggestions"
                             :key="index"
