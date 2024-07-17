@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
                       $middleware->alias([
                           'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
-                          'permit' => \App\Http\Middleware\Permit::class
+                          'allow' => \App\Http\Middleware\Allow::class
                       ]);
                   })
                   ->withExceptions(function (Exceptions $exceptions) {

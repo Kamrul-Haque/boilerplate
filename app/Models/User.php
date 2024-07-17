@@ -54,19 +54,14 @@ class User extends Authenticatable
         return null;
     }
 
-    public function hasRole(int $role): bool
-    {
-        return auth()->user()->role->value === $role;
-    }
-
     /**
-     * Checks if the user has the given role or higher
+     * Checks if the user has the given role
      *
      * @param int $role
      * @return bool
      */
-    public function hasRoleOrHigher(int $role): bool
+    public function hasRole(int $role): bool
     {
-        return auth()->user()->role->value <= $role;
+        return auth()->user()->role->value === $role;
     }
 }

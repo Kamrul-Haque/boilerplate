@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Role;
 use App\Http\Controllers as Controllers;
 use App\Http\Controllers\Admin as AdminControllers;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +21,7 @@ Route::middleware('precognitive')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('dashboard', Controllers\DashboardController::class)
              ->name('dashboard');
-        
+
         Route::get('profile', [Controllers\ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [Controllers\ProfileController::class, 'update'])->name('profile.update');
         Route::delete('profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -31,7 +30,7 @@ Route::middleware('precognitive')->group(function () {
             Route::get('dashboard', AdminControllers\DashboardController::class)
                  ->name('dashboard');
 
-            Route::middleware('permit:' . Role::ADMIN->value)->group(function () {
+            Route::middleware('allow:SUPER_ADMIN,ADMIN')->group(function () {
                 Route::resource('users', AdminControllers\UserController::class);
                 Route::delete('users/{user}/deactivate', [AdminControllers\UserController::class, 'deactivate'])
                      ->name('users.deactivate');
@@ -39,7 +38,7 @@ Route::middleware('precognitive')->group(function () {
                      ->name('users.restore');
             });
 
-            Route::middleware('permit:' . Role::SUPER_ADMIN->value)->group(function () {
+            Route::middleware('allow:SUPER_ADMIN')->group(function () {
                 Route::resource('settings', AdminControllers\SettingController::class)->only('edit', 'update');
             });
         });

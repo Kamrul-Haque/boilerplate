@@ -121,7 +121,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return back()->with('success', 'User deactivated successfully');
+        return back()->with('error', 'User deactivated successfully');
     }
 
     /**
