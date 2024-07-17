@@ -54,7 +54,7 @@ class User extends Authenticatable
         return null;
     }
 
-    public function hasRole($role): bool
+    public function hasRole(int $role): bool
     {
         return auth()->user()->role->value === $role;
     }

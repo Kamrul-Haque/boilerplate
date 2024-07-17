@@ -1,14 +1,13 @@
 <script setup>
 import {Head, usePage} from '@inertiajs/vue3';
 import Admin from "@/Layouts/Admin.vue";
-import Auth from "@/Layouts/Auth.vue";
 
 const page = usePage();
 </script>
 
 <template>
     <Head title="Dashboard"/>
-    <Auth>
+    <Admin>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -16,5 +15,5 @@ const page = usePage();
                 </div>
             </div>
         </div>
-    </Auth>
+    </Admin>
 </template>

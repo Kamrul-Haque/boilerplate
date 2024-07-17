@@ -12,8 +12,8 @@ const page = usePage();
 </script>
 
 <template>
-    <SideNavLink :href="route('dashboard')"
-                 :active="route().current('dashboard')">
+    <SideNavLink :href="route('admin.dashboard')"
+                 :active="route().current('admin.dashboard')">
         <span class="mdi mdi-view-dashboard"></span>
         <span :class="[showSideBar ? 'pl-3' : 'md:hidden']">Dashboard</span>
     </SideNavLink>
