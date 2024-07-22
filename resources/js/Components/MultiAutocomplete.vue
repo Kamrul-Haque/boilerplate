@@ -3,8 +3,9 @@ import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 
 const props = defineProps({
     modelValue: {
-        type: [String, Number, Object],
+        type: Array,
         required: false,
+        default: () => []
     },
     items: Array,
     itemLabel: String,
@@ -16,7 +17,6 @@ const props = defineProps({
     autofocus: Boolean,
     prependIcon: String,
     rounded: Boolean,
-    regex: String,
     height: {
         type: [String, Number],
     },
@@ -30,6 +30,8 @@ const query = ref('');
 const focused = ref(false);
 const highlightedIndex = ref(-1);
 const preventBlur = ref(false);
+const selectedItems = ref([]);
+const selectedItemValues = ref([]);
 
 const filteredSuggestions = computed(() => {
     const items = Array.isArray(props.items) ? props.items : [];
@@ -48,38 +50,39 @@ const filteredSuggestions = computed(() => {
     }
 });
 
+function updateQuery() {
+    query.value = '';
+}
 
 const emit = defineEmits(['update:modelValue']);
 
-function selectItem(suggestion) {
-    preventBlur.value = true;
+function toggleItem(suggestion) {
+    const index = selectedItems.value.indexOf(suggestion);
 
-    if (typeof suggestion === 'object')
-        query.value = suggestion[props.itemLabel];
-    else
-        query.value = suggestion;
+    if (index === -1) {
+        selectedItems.value.push(suggestion);
+    } else {
+        selectedItems.value.splice(index, 1);
+    }
 
-    focused.value = false;
-    highlightedIndex.value = -1;
+    selectedItemValues.value = selectedItems.value.map(item => typeof item === 'object' ? item[props.itemValue] : item);
 
-    if (typeof suggestion === 'object')
-        emit('update:modelValue', suggestion[props.itemValue]);
-    else
-        emit('update:modelValue', suggestion);
+    emit('update:modelValue', selectedItemValues.value);
+
+    updateQuery();
+}
+
+function clearSelection() {
+    query.value = '';
+    selectedItems.value = [];
+    emit('update:modelValue', selectedItems.value);
 }
 
 watch(query, () => {
     if (query.value === '') {
         input.value.focus();
-        emit('update:modelValue', null);
     }
 });
-
-function handleBlur(event) {
-    if (!preventBlur.value && !input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
-        focused.value = false;
-    }
-}
 
 function handleKeyDown(event) {
     if (event.key === 'ArrowDown') {
@@ -104,7 +107,7 @@ function handleKeyDown(event) {
         });
     } else if (event.key === 'Enter' && highlightedIndex.value !== -1) {
         event.preventDefault();
-        selectItem(filteredSuggestions.value[highlightedIndex.value]);
+        toggleItem(filteredSuggestions.value[highlightedIndex.value]);
     } else if (event.key === 'Escape') {
         focused.value = false;
         highlightedIndex.value = -1;
@@ -128,24 +131,39 @@ function scrollToHighlightedItem() {
     }
 }
 
+function handleBlur(event) {
+    if (!preventBlur.value && !input.value.contains(event.target) && !(suggestionList.value && suggestionList.value.contains(event.target))) {
+        focused.value = false;
+    }
+}
+
 const input = ref(null);
 const suggestionList = ref(null);
 
 onMounted(() => {
-    window.addEventListener('resize', checkDropdownPosition);
     document.addEventListener('click', handleGlobalClick);
 
-    if (props.modelValue !== null) {
-        let item;
-
+    if (props.modelValue.length) {
         if (typeof props.items[0] === 'object') {
-            item = props.items.find(item => item[props.itemValue] == props.modelValue);
+            props.items.map(item => {
+                if (props.modelValue.includes(item[props.itemValue])) {
+                    selectedItems.value.push(item);
+                    selectedItemValues.value.push(item[props.itemValue]);
+                }
+            });
         } else {
-            item = props.items.find(item => item == props.modelValue);
+            props.items.map(item => {
+                if (props.modelValue.includes(item)) {
+                    selectedItems.value.push(item);
+                    selectedItemValues.value.push(item);
+                }
+            });
         }
-
-        selectItem(item);
     }
+
+    console.log(selectedItems.value)
+
+    updateQuery();
 });
 
 function handleGlobalClick(event) {
@@ -181,6 +199,22 @@ onUnmounted(() => {
             <span v-if="required"
                   class="text-error text-sm">*</span>
         </label>
+        <div class="py-1 border-2 border-dashed border-gray-200 rounded-t">
+            <template v-if="selectedItems.length">
+                <div class="flex flex-wrap gap-1">
+                    <p v-for="(item, index) in selectedItems"
+                       :key="index"
+                       class="text-sm px-2 py-1 rounded-full bg-gray-200 text-gray-700">
+                        {{ typeof item === 'object' ? item[itemLabel] : item }}
+                    </p>
+                </div>
+            </template>
+            <template v-else>
+                <div class="flex justify-center items-center my-1">
+                    <p class="text-gray-700 text-sm">No Item Selected.</p>
+                </div>
+            </template>
+        </div>
         <div class="relative">
             <div v-if="prependIcon"
                  class="absolute flex items-center text-xl text-gray-800 left-0 ml-3 inset-y-0">
@@ -193,10 +227,9 @@ onUnmounted(() => {
                        :class="[error ? 'border-error' : 'border-gray-200', prependIcon ? 'pl-9' : '', rounded ? 'rounded-full' : 'rounded-md', height ? `h-${height}` : '']"
                        v-model="query"
                        type="text"
-                       :placeholder="[placeholder || 'Search Values...']"
-                       :required="required"
+                       :placeholder="[placeholder || 'Please Select...']"
+                       :required="required ? !selectedItems.length : false"
                        :autofocus="autofocus"
-                       :pattern="regex"
                        autocomplete="off"
                        @keydown="handleKeyDown"
                        @focus="checkDropdownPosition"
@@ -209,8 +242,11 @@ onUnmounted(() => {
                         ref="suggestionList">
                         <li v-for="(suggestion, index) in filteredSuggestions"
                             :key="index"
-                            @mousedown="selectItem(suggestion)"
-                            :class="['p-2 cursor-pointer rounded', highlightedIndex === index ? 'bg-primary text-white' : 'hover:bg-primary hover:text-white']">
+                            @click="toggleItem(suggestion)"
+                            class="p-2 cursor-pointer rounded flex items-center">
+                            <input type="checkbox"
+                                   :checked="selectedItemValues.includes(typeof suggestion === 'object' ? suggestion[itemValue] : suggestion)"
+                                   class="mr-2">
                             {{ typeof suggestion === 'object' ? suggestion[itemLabel] : suggestion }}
                         </li>
                     </ul>
@@ -218,7 +254,7 @@ onUnmounted(() => {
             </div>
             <div v-if="query && clearable"
                  class="absolute flex items-center text-xl text-primary right-0 mr-8 inset-y-0"
-                 @click="query = ''">
+                 @click="clearSelection">
                 <i class="mdi mdi-close"></i>
             </div>
             <div class="absolute flex items-center text-xl text-gray-500 right-0 mr-3 inset-y-0">
