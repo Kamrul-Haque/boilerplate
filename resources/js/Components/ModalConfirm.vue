@@ -10,6 +10,8 @@ const props = defineProps({
         default: false
     }
 })
+
+defineEmits(['cancel', 'confirm'])
 </script>
 
 <template>

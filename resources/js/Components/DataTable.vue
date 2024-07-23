@@ -2,7 +2,7 @@
 import Paginator from "@/Components/Paginator.vue";
 import {Link, router} from "@inertiajs/vue3";
 import TextField from "@/Components/TextField.vue";
-import {reactive, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import Select from "@/Components/Select.vue";
 
 const props = defineProps({
@@ -47,16 +47,28 @@ const params = reactive({
     perPage: props.filters.perPage ? parseInt(props.filters.perPage) : 15,
 });
 
-watch(params, (newVal, oldVal) => {
-    if (newVal.perPage !== oldVal.perPage) {
+let perPage = ref(params.perPage);
+let search = ref(params.search);
+
+watch(search, (value) => {
+    params.page = 1;
+    params.search = value;
+})
+
+watch(perPage, (newVal, oldVal) => {
+    if (newVal != oldVal) {
         params.page = 1;
+        params.perPage = newVal;
     }
+})
+
+watch(params, () => {
     updateData();
 }, {
     deep: true
 });
 
-async function updateData() {
+function updateData() {
     router.get(props.indexRoute, params, {
         preserveScroll: true,
         preserveState: true,
@@ -71,8 +83,6 @@ function sort(sortBy) {
         params.sortBy = sortBy;
         params.sortDesc = false;
     }
-
-    updateData();
 }
 </script>
 
@@ -94,7 +104,7 @@ function sort(sortBy) {
         </div>
 
         <div class="flex items-center">
-            <TextField v-model="params.search"
+            <TextField v-model="search"
                        class="flex-1"
                        height="8"
                        name="search"
@@ -185,7 +195,7 @@ function sort(sortBy) {
                    for="perPage">
                 Items:
             </label>
-            <Select v-model="params.perPage"
+            <Select v-model="perPage"
                     class="min-w-[64px]"
                     :height="10"
                     :items="['5','10','15','20','25','30']"
