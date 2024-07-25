@@ -3,12 +3,14 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import SideBarLinks from "@/Components/SideBarLinks.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
-import {computed, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {usePage} from "@inertiajs/vue3";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import Avatar from "@/Components/Avatar.vue";
 
 const page = usePage();
 let showSideBar = ref(screen.width >= 640)
+let hasScrolled = ref(false);
 const cssProps = computed(() => {
     return {
         '--primary': page.props.settings.primaryColor,
@@ -17,6 +19,20 @@ const cssProps = computed(() => {
         '--background': page.props.settings.backgroundColor,
         '--table-stripe-color': page.props.settings.tableStripeColor,
     }
+})
+
+function handleScroll() {
+    hasScrolled.value = window.scrollY > 70;
+
+    console.log(hasScrolled.value)
+}
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
 })
 </script>
 
@@ -45,69 +61,73 @@ const cssProps = computed(() => {
                 <SideBarLinks :show-side-bar="showSideBar"/>
             </div>
         </nav>
-        <header class="header"
-                :class="[showSideBar ? 'md:ml-[264px] md:w-[calc(100%-264px)]' : 'md:ml-[82px] md:w-[calc(100%-82px)]']">
-            <div class="nav">
-                <button @click="showSideBar = !showSideBar"
-                        class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150">
-                    <i class="mdi mdi-menu"></i>
-                </button>
+        <div class="content"
+             :class="[showSideBar ? 'md:pl-[256px]' : 'md:pl-[74px]']">
+            <header class="header"
+                    :class="[showSideBar ? 'md:w-[calc(100%-292px)]' : 'md:w-[calc(100%-110px)]', hasScrolled ? 'shadow-xl' : 'shadow-sm']">
+                <div class="nav">
+                    <button @click="showSideBar = !showSideBar"
+                            class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
 
-                <img v-if="page.props.settings.portal_logo"
-                     :src="page.props.settings.portal_logo"
-                     class="avatar md:hidden"
-                     alt="logo"
-                     width="50"
-                     height="50"/>
+                    <img v-if="page.props.settings.portal_logo"
+                         :src="page.props.settings.portal_logo"
+                         class="avatar md:hidden"
+                         alt="logo"
+                         width="50"
+                         height="50"/>
 
-                <Dropdown>
-                    <template #trigger>
+                    <Dropdown>
+                        <template #trigger>
                         <span class="inline-flex rounded-md">
                             <button type="button"
                                     class="header-link">
+                                <Avatar :path="page.props.auth.user.image || page.props.app.url + '/images/no-avatar.png'"
+                                        class="mr-2"
+                                        size="30px"/>
                                 {{ page.props.auth.user.name }}
-
                                 <span class="mdi mdi-chevron-down ml-1"></span>
                             </button>
                         </span>
-                    </template>
+                        </template>
 
-                    <template #content>
-                        <DropdownLink :href="route('profile.edit')">
-                            <span class="mdi mdi-account"></span>
-                            Profile
-                        </DropdownLink>
+                        <template #content>
+                            <DropdownLink :href="route('profile.edit')">
+                                <span class="mdi mdi-account"></span>
+                                Profile
+                            </DropdownLink>
 
-                        <DropdownLink as="Link"
-                                      method="post"
-                                      :href="route('logout')">
-                            <span class="mdi mdi-power"></span>
-                            Log Out
-                        </DropdownLink>
-                    </template>
-                </Dropdown>
-            </div>
-        </header>
-        <div class="content"
-             :class="[showSideBar ? 'md:pl-[256px]' : 'md:pl-[74px]']">
+                            <DropdownLink as="Link"
+                                          method="post"
+                                          :href="route('logout')">
+                                <span class="mdi mdi-power"></span>
+                                Log Out
+                            </DropdownLink>
+                        </template>
+                    </Dropdown>
+                </div>
+            </header>
+
             <main class="main">
                 <div class="container">
-                    <FlashMessage/>
-
                     <slot/>
                 </div>
             </main>
+
+            <footer class="footer"
+                    :class="[showSideBar ? 'md:w-[calc(100%-292px)]' : 'md:w-[calc(100%-110px)]']">
+                {{ page.props.settings.copyright_text }}
+                Developed by
+                <a href="https://www.linkedin.com/in/utchas/"
+                   target="_blank"
+                   class="text-accent hover:text-blue-900">
+                    Kamrul Haque
+                </a>
+            </footer>
+
+            <FlashMessage/>
         </div>
-        <footer class="footer"
-                :class="[showSideBar ? 'pl-64' : 'pl-0 md:pl-[74px]']">
-            {{ page.props.settings.copyright_text }}
-            Developed by
-            <a href="https://www.linkedin.com/in/utchas/"
-               target="_blank"
-               class="text-accent hover:text-blue-900">
-                Kamrul Haque
-            </a>
-        </footer>
     </div>
 </template>
 
@@ -125,6 +145,7 @@ select option {
 }
 
 td {
+    min-width: 50px;
     max-width: 150px;
     white-space: nowrap;
     overflow: hidden;
