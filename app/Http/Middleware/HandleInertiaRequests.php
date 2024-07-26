@@ -34,8 +34,7 @@ class HandleInertiaRequests extends Middleware
     {
         $settings = Setting::first();
 
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [
             'app' => [
                 'name' => config('app.name'),
                 'url' => config('app.url'),
@@ -65,12 +64,10 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'flash' => function () use ($request) {
-                return [
-                    'success' => $request->session()->get('success'),
-                    'error' => $request->session()->get('error'),
-                ];
-            },
-        ];
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+            ],
+        ]);
     }
 }
