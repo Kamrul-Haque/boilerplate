@@ -22,7 +22,7 @@ const form = useForm('post', props.user ? route('admin.users.update', props.user
     email: props.user ? props.user.email : null,
     phone: props.user ? props.user.phone : null,
     address: props.user ? props.user.address : null,
-    role: props.user ? [props.user.role] : [],
+    role: props.user ? [props.user.role.value] : [],
     image: null,
 });
 

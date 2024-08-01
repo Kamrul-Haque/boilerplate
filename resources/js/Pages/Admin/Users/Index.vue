@@ -44,7 +44,7 @@ function deleteItem() {
 
             <template v-slot:role="slotProp">
                 <span class="border border-accent text-accent text-sm rounded-full px-2 py-1 capitalize font-semibold">
-                    {{ slotProp.item.role_name }}
+                    {{ slotProp.item.role.name }}
                 </span>
             </template>
 
