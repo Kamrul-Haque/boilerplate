@@ -187,7 +187,7 @@ function sort(sortBy) {
                 </div>
             </div>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex flex-wrap gap-x-2 justify-between items-center my-4 md:my-0">
             <div class="flex-1">
                 <Paginator :links="items.links"/>
             </div>
@@ -197,7 +197,7 @@ function sort(sortBy) {
                     Items:
                 </label>
                 <Select v-model="perPage"
-                        class="min-w-[64px]"
+                        class="w-16"
                         :height="10"
                         :items="['5','10','15','20','25','30']"
                         name="perPage"/>

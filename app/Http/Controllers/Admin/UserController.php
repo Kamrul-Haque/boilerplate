@@ -35,6 +35,7 @@ class UserController extends Controller
                                $query->orderBy('id', 'desc');
                            })
                            ->paginate($request->perPage)
+                           ->onEachSide(0)
                            ->withQueryString(),
             'filters' => [
                 'search' => $request->search,
@@ -96,8 +97,7 @@ class UserController extends Controller
     {
         $valid = $request->validated();
 
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             if ($user->getRawOriginal('image') && Storage::exists($user->getRawOriginal('image')))
                 Storage::delete($user->getRawOriginal('image'));
 
