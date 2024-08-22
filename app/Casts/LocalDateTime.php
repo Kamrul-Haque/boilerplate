@@ -14,14 +14,14 @@ class LocalDateTime implements CastsAttributes
      *
      * @param array<string, mixed> $attributes
      */
-    public function get(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function get(Model $model, string $key, mixed $value, array $attributes): ?object
     {
         $timezone = (auth()->check() && auth()->user()->timezone)
             ? auth()->user()->timezone
             : config('app.timezone');
 
         if (!is_null($value))
-            return DatetimeConversionService::convertToLocal(
+            return (object)DatetimeConversionService::convertToLocal(
                 $value,
                 $timezone,
                 config('app.date_format'),
@@ -36,14 +36,14 @@ class LocalDateTime implements CastsAttributes
      *
      * @param array<string, mixed> $attributes
      */
-    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function set(Model $model, string $key, mixed $value, array $attributes): ?object
     {
         $timezone = (auth()->check() && auth()->user()->timezone)
             ? auth()->user()->timezone
             : config('app.timezone');
 
         if (is_string($value) || $value instanceof Carbon)
-            return DatetimeConversionService::convertToUTC($value, $timezone);
+            return (object)DatetimeConversionService::convertToUTC($value, $timezone);
 
         return null;
     }
