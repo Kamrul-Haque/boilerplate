@@ -9,8 +9,10 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Avatar from "@/Components/Avatar.vue";
 
 const page = usePage();
-let showSideBar = ref(screen.width >= 640)
-let hasScrolled = ref(false);
+const showSideBar = ref(screen.width >= 640)
+const hasScrolled = ref(false);
+const sideBarRef = ref(null);
+const toggleButtonRef = ref(null);
 const cssProps = computed(() => {
     return {
         '--primary': page.props.settings.primaryColor,
@@ -27,11 +29,23 @@ function handleScroll() {
     console.log(hasScrolled.value)
 }
 
+function handleClickOutside(event) {
+    if ((window.innerWidth < 768) &&
+        sideBarRef.value &&
+        !sideBarRef.value.contains(event.target) &&
+        toggleButtonRef.value &&
+        !toggleButtonRef.value.contains(event.target)) {
+        showSideBar.value = false;
+    }
+}
+
 onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
     window.addEventListener('scroll', handleScroll);
 })
 
 onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
     window.removeEventListener('scroll', handleScroll);
 })
 </script>
@@ -40,7 +54,8 @@ onUnmounted(() => {
     <div class="app"
          :style="cssProps">
         <nav :class="[showSideBar ? 'w-64' : 'w-0 md:w-[75px]']"
-             class="side-nav">
+             class="side-nav"
+             ref="sideBarRef">
             <div class="brand">
                 <img v-if="page.props.settings.portal_logo"
                      :src="page.props.settings.portal_logo"
@@ -67,7 +82,8 @@ onUnmounted(() => {
                     :class="[showSideBar ? 'md:w-[calc(100%-292px)]' : 'md:w-[calc(100%-110px)]', hasScrolled ? 'shadow-xl' : 'shadow-sm']">
                 <div class="nav">
                     <button @click="showSideBar = !showSideBar"
-                            class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150">
+                            class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150"
+                            ref="toggleButtonRef">
                         <i class="mdi mdi-menu"></i>
                     </button>
 
