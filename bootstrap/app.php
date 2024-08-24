@@ -22,5 +22,23 @@ return Application::configure(basePath: dirname(__DIR__))
                       ]);
                   })
                   ->withExceptions(function (Exceptions $exceptions) {
-                      //
+                      if (request()->expectsJson()) {
+                          $exceptions->render(function (NotFoundHttpException $e) {
+                              return response()->json(['error' => 'Requested resource is not found'], 404);
+                          });
+
+                          $exceptions->render(function (AuthenticationException $e) {
+                              return response()->json(['error' => 'Unauthorized'], 401);
+                          });
+                      }
+
+                      $exceptions->render(function (QueryException $e) {
+                          if (request()->expectsJson())
+                              return response()->json(['error' => 'A database error has occurred.'], 500);
+
+                          if (config('app.debug'))
+                              return back()->with('error', $e->getMessage());
+
+                          return back()->with('error', 'A database error has occurred.');
+                      });
                   })->create();
