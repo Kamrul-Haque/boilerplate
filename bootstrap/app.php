@@ -5,6 +5,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -35,13 +36,13 @@ return Application::configure(basePath: dirname(__DIR__))
                           });
                       }
 
-                      $exceptions->render(function (QueryException $e) {
-                          if (request()->expectsJson())
+                      $exceptions->render(function (QueryException $e, Request $request) {
+                          if ($request->expectsJson())
                               return response()->json(['error' => 'A database error has occurred.'], 500);
 
-                          if (config('app.debug'))
-                              return back()->with('error', $e->getMessage());
+                          if (!config('app.debug'))
+                              session()->flash('error', 'A database error has occurred.');
 
-                          return back()->with('error', 'A database error has occurred.');
+                          throw $e;
                       });
                   })->create();
