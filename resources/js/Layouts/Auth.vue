@@ -5,7 +5,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link, usePage} from '@inertiajs/vue3';
+import {usePage} from '@inertiajs/vue3';
 import DarkButton from "@/Components/DarkButton.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
 
@@ -26,18 +26,15 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div :style="cssProps">
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-background">
+            <nav class="bg-white shadow-sm">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('home')"
-                                      :class="[route().current('home') ? 'text-primary' : 'text-gray-800']">
-                                    <ApplicationLogo class="block text-4xl w-auto fill-current"/>
-                                </Link>
+                                <ApplicationLogo class="block text-4xl w-auto fill-current"/>
                             </div>
 
                             <!-- Navigation Links -->

@@ -27,10 +27,12 @@ Route::middleware('precognitive')->group(function () {
         Route::delete('profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 
         Route::prefix('admin')->as('admin.')->group(function () {
-            Route::get('dashboard', AdminControllers\DashboardController::class)
-                 ->name('dashboard');
+            Route::post('toggle-sidebar', AdminControllers\ToggleSidebarController::class)->name('toggle-sidebar');
 
             Route::middleware('allow:SUPER_ADMIN,ADMIN')->group(function () {
+                Route::get('dashboard', AdminControllers\DashboardController::class)
+                     ->name('dashboard');
+                
                 Route::resource('users', AdminControllers\UserController::class);
                 Route::delete('users/{user}/deactivate', [AdminControllers\UserController::class, 'deactivate'])
                      ->name('users.deactivate');

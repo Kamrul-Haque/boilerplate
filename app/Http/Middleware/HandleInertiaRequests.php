@@ -68,6 +68,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),
             ],
+            'show_sidebar' => !session()->has('show_sidebar'),
         ]);
     }
 }

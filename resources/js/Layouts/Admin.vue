@@ -9,8 +9,8 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Avatar from "@/Components/Avatar.vue";
 
 const page = usePage();
-const showSideBar = ref(screen.width >= 640)
 const hasScrolled = ref(false);
+const showSideBar = ref(screen.width >= 640);
 const sideBarRef = ref(null);
 const toggleButtonRef = ref(null);
 const cssProps = computed(() => {
@@ -27,6 +27,19 @@ function handleScroll() {
     hasScrolled.value = window.scrollY > 70;
 
     console.log(hasScrolled.value)
+}
+
+function toggleSideBar() {
+    showSideBar.value = !showSideBar.value;
+
+    /*axios.post(route('admin.toggle-sidebar'), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: (response) => {
+            console.log(response);
+            showSideBar.value = response.show_sidebar;
+        }
+    });*/
 }
 
 function handleClickOutside(event) {
@@ -81,7 +94,7 @@ onUnmounted(() => {
             <header class="header"
                     :class="[showSideBar ? 'md:w-[calc(100%-292px)]' : 'md:w-[calc(100%-110px)]', hasScrolled ? 'shadow-xl' : 'shadow-sm']">
                 <div class="nav">
-                    <button @click="showSideBar = !showSideBar"
+                    <button @click="toggleSideBar"
                             class="mx-4 text-lg hover:text-gray-600 active:text-gray-600 transition ease-in-out duration-150"
                             ref="toggleButtonRef">
                         <i class="mdi mdi-menu"></i>
@@ -96,14 +109,17 @@ onUnmounted(() => {
 
                     <Dropdown>
                         <template #trigger>
-                        <span class="inline-flex rounded-md">
+                        <span class="inline-flex">
                             <button type="button"
                                     class="header-link">
                                 <Avatar :path="page.props.auth.user.image || page.props.app.url + '/images/no-avatar.png'"
                                         class="mr-2"
-                                        size="30px"/>
-                                {{ page.props.auth.user.name }}
-                                <span class="mdi mdi-chevron-down ml-1"></span>
+                                        size="35px"/>
+                                <div>
+                                    <p>{{ page.props.auth.user.name }}</p>
+                                    <span class="text-gray-400 capitalize">{{ page.props.auth.user.role.name }}</span>
+                                </div>
+                                <i class="mdi mdi-chevron-down ml-1"></i>
                             </button>
                         </span>
                         </template>
