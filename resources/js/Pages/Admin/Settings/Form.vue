@@ -6,6 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextArea from "@/Components/TextArea.vue";
 import FileInput from "@/Components/FileInput.vue";
 import {useForm} from "laravel-precognition-vue-inertia";
+import ColorPicker from "@/Components/ColorPicker.vue";
 
 const props = defineProps({
     setting: {
@@ -101,45 +102,45 @@ function submit() {
                                    @change="form.validate('whatsapp')"
                                    :error="form.errors.whatsapp"/>
 
-                        <TextField v-model="form.primary_color"
-                                   required
-                                   placeholder="#000000"
-                                   class="col-span-2 md:col-span-1"
-                                   label="Primary Color"
-                                   @change="form.validate('primary_color')"
-                                   :error="form.errors.primary_color"/>
+                        <ColorPicker v-model="form.primary_color"
+                                     required
+                                     placeholder="#000000"
+                                     class="col-span-2 md:col-span-1"
+                                     label="Primary Color"
+                                     @change="form.validate('primary_color')"
+                                     :error="form.errors.primary_color"/>
 
-                        <TextField v-model="form.secondary_color"
-                                   required
-                                   placeholder="#000000"
-                                   class="col-span-2 md:col-span-1"
-                                   label="Secondary Color"
-                                   @change="form.validate('secondary_color')"
-                                   :error="form.errors.secondary_color"/>
+                        <ColorPicker v-model="form.secondary_color"
+                                     required
+                                     placeholder="#000000"
+                                     class="col-span-2 md:col-span-1"
+                                     label="Secondary Color"
+                                     @change="form.validate('secondary_color')"
+                                     :error="form.errors.secondary_color"/>
 
-                        <TextField v-model="form.accent_color"
-                                   required
-                                   placeholder="#000000"
-                                   class="col-span-2 md:col-span-1"
-                                   label="Accent Color"
-                                   @change="form.validate('accent_color')"
-                                   :error="form.errors.accent_color"/>
+                        <ColorPicker v-model="form.accent_color"
+                                     required
+                                     placeholder="#000000"
+                                     class="col-span-2 md:col-span-1"
+                                     label="Accent Color"
+                                     @change="form.validate('accent_color')"
+                                     :error="form.errors.accent_color"/>
 
-                        <TextField v-model="form.background_color"
-                                   required
-                                   placeholder="#000000"
-                                   class="col-span-2 md:col-span-1"
-                                   label="Background Color"
-                                   @change="form.validate('background_color')"
-                                   :error="form.errors.background_color"/>
+                        <ColorPicker v-model="form.background_color"
+                                     required
+                                     placeholder="#000000"
+                                     class="col-span-2 md:col-span-1"
+                                     label="Background Color"
+                                     @change="form.validate('background_color')"
+                                     :error="form.errors.background_color"/>
 
-                        <TextField v-model="form.table_stripe_color"
-                                   required
-                                   placeholder="#000000"
-                                   class="col-span-2 md:col-span-1"
-                                   label="Table Stripe Color"
-                                   @change="form.validate('table_stripe_color')"
-                                   :error="form.errors.table_stripe_color"/>
+                        <ColorPicker v-model="form.table_stripe_color"
+                                     required
+                                     placeholder="#000000"
+                                     class="col-span-2 md:col-span-1"
+                                     label="Table Stripe Color"
+                                     @change="form.validate('table_stripe_color')"
+                                     :error="form.errors.table_stripe_color"/>
 
                         <TextField v-model="form.copyright_text"
                                    label="Copyright Text"

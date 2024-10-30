@@ -25,8 +25,6 @@ const cssProps = computed(() => {
 
 function handleScroll() {
     hasScrolled.value = window.scrollY > 70;
-
-    console.log(hasScrolled.value)
 }
 
 function toggleSideBar() {

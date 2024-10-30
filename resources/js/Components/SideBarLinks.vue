@@ -22,7 +22,7 @@ const page = usePage();
         <span class="mdi mdi-account-multiple"></span>
         <span :class="[showSideBar ? 'pl-3' : 'md:hidden']">Users</span>
     </SideNavLink>
-    <SideNavLink v-if="page.props.auth.user.role === 1"
+    <SideNavLink v-if="page.props.auth.user.role.value === 1"
                  :href="route('admin.settings.edit', page.props.settings.id)"
                  :active="route().current('admin.settings.*')">
         <span class="mdi mdi-cog"></span>
