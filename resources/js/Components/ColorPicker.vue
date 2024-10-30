@@ -10,7 +10,8 @@ const props = defineProps({
     rounded: Boolean,
     height: {
         type: [String, Number],
-    }
+    },
+    preset: Boolean,
 });
 
 defineEmits(['update:modelValue']);
@@ -38,9 +39,10 @@ defineEmits(['update:modelValue']);
                    @input="$emit('update:modelValue', $event.target.value)"
                    class="cursor-pointer h-[42px] w-24 border-gray-200 rounded-md rounded-l-none"
                    colorpick-eyedropper-active="false"
-                   list="presetColors"/>
+                   :list="preset ? 'presetColors' : null"/>
 
-            <datalist id="presetColors">
+            <datalist v-if="preset"
+                      id="presetColors">
                 <option>#FFFFFF</option>
                 <option>#C0C0C0</option>
                 <option>#808080</option>
