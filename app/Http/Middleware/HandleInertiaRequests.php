@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Enums\Role;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -68,7 +69,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),
             ],
-            'show_sidebar' => !session()->has('show_sidebar'),
+            'show_sidebar' => Session::get('show_sidebar'),
         ]);
     }
 }

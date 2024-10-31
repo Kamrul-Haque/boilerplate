@@ -10,7 +10,7 @@ import Avatar from "@/Components/Avatar.vue";
 
 const page = usePage();
 const hasScrolled = ref(false);
-const showSideBar = ref(screen.width >= 640);
+const showSideBar = ref(screen.width >= 640 ? page.props.show_sidebar : false);
 const sideBarRef = ref(null);
 const toggleButtonRef = ref(null);
 const cssProps = computed(() => {
@@ -30,14 +30,12 @@ function handleScroll() {
 function toggleSideBar() {
     showSideBar.value = !showSideBar.value;
 
-    /*axios.post(route('admin.toggle-sidebar'), {}, {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: (response) => {
-            console.log(response);
-            showSideBar.value = response.show_sidebar;
-        }
-    });*/
+    if (screen.width >= 640) {
+        axios.post(route('admin.toggle-sidebar'), {}, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    }
 }
 
 function handleClickOutside(event) {

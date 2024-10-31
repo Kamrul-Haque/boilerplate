@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ToggleSidebarController extends Controller
 {
@@ -12,8 +13,8 @@ class ToggleSidebarController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $sidebarState = $request->session()->get('show_sidebar', true);
-        $request->session()->keep('show_sidebar', !$sidebarState);
+        $sidebarState = Session::get('show_sidebar', true);
+        Session::put('show_sidebar', !$sidebarState);
 
         return response()->json(['show_sidebar' => !$sidebarState]);
     }
