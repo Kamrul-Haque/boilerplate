@@ -125,4 +125,5 @@ return [
 
     'date_format' => env('DATETIME_FORMAT', 'd/m/Y'),
     'time_format' => env('TIME_FORMAT', 'H:i a'),
+    'users_default_timezone' => env('APP_DEFAULT_TIMEZONE', 'Asia/Dhaka'),
 ];

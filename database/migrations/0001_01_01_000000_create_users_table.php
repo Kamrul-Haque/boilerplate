@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable()->unique();
-            $table->string('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->tinyInteger('role')->default(3);
@@ -24,7 +23,12 @@ return new class extends Migration {
             $table->string('auth_provider_id')->nullable();
             $table->string('auth_provider_token')->nullable();
             $table->string('auth_provider_refresh_token')->nullable();
+            $table->string('timezone')->default(config('app.users_default_timezone'));
             $table->rememberToken();
+            $table->foreignId('created_by_id')
+                  ->nullable()
+                  ->constrained('users')
+                  ->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

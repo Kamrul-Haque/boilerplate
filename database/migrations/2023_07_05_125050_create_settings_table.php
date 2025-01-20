@@ -30,7 +30,6 @@ return new class extends Migration {
             $table->string('secondary_color');
             $table->string('accent_color');
             $table->string('background_color');
-            $table->string('table_stripe_color');
             $table->boolean('under_maintenance')->default(false);
             $table->timestamps();
         });

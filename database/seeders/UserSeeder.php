@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -16,31 +17,21 @@ class UserSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'super@admin.com',
             'password' => bcrypt('Test@2024'),
-            'role' => 1,
+            'role' => Role::SUPER_ADMIN->value,
         ]);
 
         User::create([
             'name' => 'Mr. Admin',
             'email' => 'admin@email.com',
             'password' => bcrypt('Test@2024'),
-            'role' => 2,
+            'role' => Role::ADMIN->value,
         ]);
 
         User::create([
             'name' => 'Mr. User',
             'email' => 'user@email.com',
             'password' => bcrypt('Test@2024'),
-            'role' => 3,
+            'role' => Role::USER->value,
         ]);
-
-        /*foreach (range('A', 'Z') as $index => $alphabet)
-        {
-            User::create([
-                'name' => 'Mr. User ' . $alphabet,
-                'email' => 'user' . Str::lower($alphabet) . '@email.com',
-                'password' => bcrypt('Buyonia@12345'),
-                'role' => 3,
-            ]);
-        }*/
     }
 }

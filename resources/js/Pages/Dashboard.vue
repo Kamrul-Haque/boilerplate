@@ -1,9 +1,6 @@
 <script setup>
-import {Head, usePage} from '@inertiajs/vue3';
-import Admin from "@/Layouts/Admin.vue";
+import {Head} from '@inertiajs/vue3';
 import Auth from "@/Layouts/Auth.vue";
-
-const page = usePage();
 </script>
 
 <template>

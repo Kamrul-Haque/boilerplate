@@ -67,7 +67,7 @@ trait HasCreatedBy
         if ($this->created_by_id)
             return $this->created_by->name;
 
-        return 'Blank';
+        return 'System';
     }
 
     /**

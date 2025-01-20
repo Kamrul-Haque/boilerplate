@@ -11,9 +11,7 @@ Route::get('auth/{provider}/redirect', [Controllers\AuthProviderController::clas
 Route::get('auth/{provider}/callback', [Controllers\AuthProviderController::class, 'handleProviderCallback'])
      ->name('auth.provider.callback');
 
-Route::get('/', function () {
-    return inertia('Home');
-})->name('home');
+Route::get('/', Controllers\HomeController::class)->name('home');
 
 Route::middleware('precognitive')->group(function () {
     Route::get('users/{user}/image', [AdminControllers\UserController::class, 'getImage'])->name('users.image');
@@ -32,7 +30,7 @@ Route::middleware('precognitive')->group(function () {
             Route::middleware('allow:SUPER_ADMIN,ADMIN')->group(function () {
                 Route::get('dashboard', AdminControllers\DashboardController::class)
                      ->name('dashboard');
-                
+
                 Route::resource('users', AdminControllers\UserController::class);
                 Route::delete('users/{user}/deactivate', [AdminControllers\UserController::class, 'deactivate'])
                      ->name('users.deactivate');

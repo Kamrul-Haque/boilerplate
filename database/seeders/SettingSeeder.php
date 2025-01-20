@@ -22,7 +22,6 @@ class SettingSeeder extends Seeder
             'secondary_color' => '#222222',
             'accent_color' => '#2ECC71',
             'background_color' => '#F5F5F5',
-            'table_stripe_color' => '#EAECF1',
         ]);
     }
 }
