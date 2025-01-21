@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
                 'today' => today()->toDateString(),
                 'previous_url' => url()->previous(),
             ],
-            'settings' => [
+            'settings' => $settings ? [
                 'id' => $settings->id,
                 'name' => $settings->name,
                 'logo' => $settings->logo,
@@ -54,8 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'secondaryColor' => $settings->secondary_color,
                 'accentColor' => $settings->accent_color,
                 'backgroundColor' => $settings->background_color,
-                'tableStripeColor' => $settings->table_stripe_color,
-            ],
+            ] : null,
             'auth' => [
                 'user' => $request->user(),
                 'roles' => Role::array(),

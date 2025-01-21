@@ -2,6 +2,8 @@
 
 use App\Models\User;
 
+beforeEach(function () {});
+
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
 
