@@ -54,6 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'secondaryColor' => $settings->secondary_color,
                 'accentColor' => $settings->accent_color,
                 'backgroundColor' => $settings->background_color,
+                'description' => $settings->description,
             ] : null,
             'auth' => [
                 'user' => $request->user(),

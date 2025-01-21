@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,6 +12,9 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
+        if (auth()->user()->hasRole(Role::USER->value))
+            return inertia('Dashboard');
+
         return redirect()->route('admin.dashboard');
     }
 }

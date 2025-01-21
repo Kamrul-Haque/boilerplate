@@ -8,7 +8,6 @@ import NavLink from "@/Components/NavLink.vue";
 import DarkButton from "@/Components/DarkButton.vue";
 import NavigationDrawer from "@/Components/ui/NavigationDrawer.vue";
 import SearchDrawer from "@/Components/ui/SearchDrawer.vue";
-import SearchBox from "@/Components/ui/SearchBox.vue";
 
 const page = usePage();
 
@@ -33,39 +32,13 @@ watch(showNavigationDrawer, (value) => {
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-4">
-                <div class="ms-3 relative">
-                    <Dropdown align="left"
-                              width="48"
-                              content-classes="bg-white max-h-[450px] overflow-y-auto overflow-x-hidden">
-                        <template #trigger>
-                            <span class="inline-flex rounded-md">
-                                <button type="button"
-                                        class="inline-flex items-center font-semibold text-gray-700 hover:text-primary focus:outline-none focus:text-primary transition ease-in-out duration-300">
-                                    <i class="mdi mdi-format-list-bulleted mr-1"></i>
-                                    Categories
-
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                            </span>
-                        </template>
-
-                        <template #content>
-                            <DropdownLink v-for="category in page.props.data.categories"
-                                          :key="category.id"
-                                          class="px-4 text-gray-700 inline-flex items-center justify-between"
-                                          :href="route('courses.index', {categories: category.slug})">
-                                {{ category.name }}
-                                <i class="mdi mdi-chevron-right ml-2"></i>
-                            </DropdownLink>
-                        </template>
-                    </Dropdown>
-                </div>
+                <!---->
             </div>
 
             <!-- Search Input -->
-            <div class="hidden md:flex flex-grow mx-4">
-                <SearchBox/>
-            </div>
+            <!--            <div class="hidden md:flex flex-grow mx-4">
+                            <SearchBox/>
+                        </div>-->
 
             <!-- Menu button for small screens -->
             <div class="py-3 md:hidden space-x-2">
@@ -88,13 +61,8 @@ watch(showNavigationDrawer, (value) => {
             <!-- Navigation Links -->
             <nav id="menu"
                  class="hidden md:flex items-center">
-                <NavLink :href="route('courses.index')"
-                         class="border-transparent">
-                    All Courses
-                </NavLink>
-
                 <template v-if="page.props.auth.user">
-                    <!--                    Settings Dropdown-->
+                    <!-- Settings Dropdown -->
                     <div class="ms-3 relative">
                         <Dropdown align="right"
                                   width="48">
@@ -132,10 +100,6 @@ watch(showNavigationDrawer, (value) => {
                     </div>
                 </template>
                 <template v-else>
-                    <NavLink href="#"
-                             class="border-transparent">
-                        Become Instructor
-                    </NavLink>
                     <NavLink :href="route('login')"
                              :active="route().current('login')"
                              class="border-transparent">

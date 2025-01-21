@@ -11,7 +11,9 @@ Route::get('auth/{provider}/redirect', [Controllers\AuthProviderController::clas
 Route::get('auth/{provider}/callback', [Controllers\AuthProviderController::class, 'handleProviderCallback'])
      ->name('auth.provider.callback');
 
-Route::get('/', Controllers\HomeController::class)->name('home');
+Route::get('/', function () {
+    return inertia('Home');
+})->name('home');
 
 Route::middleware('precognitive')->group(function () {
     Route::get('users/{user}/image', [AdminControllers\UserController::class, 'getImage'])->name('users.image');
